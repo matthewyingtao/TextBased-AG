@@ -5,7 +5,7 @@ from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
 
-tier_1 = {"Goblin": [5, 3, 1], "Slime": [10, 1, 0], "Zombie": [8, 1, 1]}
+tier_limits = {"gargantuan_monsters": [10, 3, 2], "huge_monsters": [10, 3, 2], "large_monsters": [10, 3, 2], "medium_monsters": [10, 3, 2], "small_monsters": [10, 3, 2], "tiny_monsters": [10, 3, 2]}
 
 attacks = {
     "Slash": [3, 0.9, 0.1, 0],
@@ -18,8 +18,6 @@ equips = {"Sword": [0, 0, 1, 0]}
 implicits_list = list(implicits.keys())
 
 attacks_list = list(attacks.keys())
-
-monster_multiplier_limit = [0.8, 1.2]
 
 
 def color_print(color, *args):
@@ -242,15 +240,12 @@ class Character:
 
 
 class Monster:
-    def __init__(self, tier):
-        self.name = random.choice(list(tier))
-        self.multiplier = round(
-            random.uniform(monster_multiplier_limit[0],
-                           monster_multiplier_limit[1]), 1)
-        self.health = round(tier.get(self.name)[0] * self.multiplier)
-        self.attack = round(tier.get(self.name)[1] * (1 / self.multiplier))
-        self.defence = tier.get(self.name)[2]
-        self.xp = random.randint(20, 40)
+	def __init__(self, tier_list, tier):
+		self.name = random.choice(list(tier_list))
+		self.health = tier_limits.get(tier)[0]
+		self.attack = tier_limits.get(tier)[1]
+		self.defence = tier_limits.get(tier)[2]
+		self.xp = random.randint(20, 40)
 
 
 player = Character()
@@ -269,7 +264,7 @@ while player.health[0] > 0:
                   "-2- Go to an inn \n"
                   "-3- View inventory\n"))
         if choice == 1:
-            monster = Monster(tier_1)
+            monster = Monster(tiny_monsters, "tiny_monsters")
             battle(monster)
             player.stats()
         elif choice == 2:

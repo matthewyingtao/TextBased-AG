@@ -5,7 +5,7 @@ from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
 
-tier_limits = {"gargantuan_monsters": [10, 3, 2], "huge_monsters": [10, 3, 2], "large_monsters": [10, 3, 2], "medium_monsters": [10, 3, 2], "small_monsters": [10, 3, 2], "tiny_monsters": [10, 3, 2]}
+tier_limits = {"gargantuan_monsters": [50, 10, 10], "huge_monsters": [30, 9, 6], "large_monsters": [25, 8, 5], "medium_monsters": [18, 6, 4], "small_monsters": [13, 5, 3], "tiny_monsters": [10, 3, 2]}
 
 attacks = {
     "Slash": [3, 0.9, 0.1, 0],

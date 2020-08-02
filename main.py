@@ -2,6 +2,7 @@ import random
 from os import system
 import math
 from implicits import implicits
+from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
 
 tier_1 = {"Goblin": [5, 3, 1], "Slime": [10, 1, 0], "Zombie": [8, 1, 1]}

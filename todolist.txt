@@ -1,10 +1,11 @@
 TO DO LIST:
-	add a way to choose the difficulty of monsters
-	make the inventory more intuitive to use
-	move stats to a class, for easier access and control
-	add proper try: except: clauses
-	add proper input testing
-	fix the level up input checking
-	add more comments
-	add new inventory system for creating item classes
-	add new function for handling loot, weighted rolls
+	Add a way to choose the difficulty of monsters.
+	Make the inventory more intuitive to use.
+	Move stats to a class, for easier access and control.
+	Add proper try: except: clauses.
+	Add proper input testing.
+	Fix the level up input checking.
+	Add more comments.
+	Add new inventory system for creating item classes.
+	Add new function for handling loot, weighted rolls.
+	Add higher xp values (and loot i guess) for harder monsters.

@@ -260,25 +260,40 @@ dog.stats()
 player.stats()
 
 while player.health[0] > 0:
-    try:
-        choice = int(
-            input("What would you like to do? \n"
-                  "-1- Adventure \n"
-                  "-2- Go to an inn \n"
-                  "-3- View inventory\n"))
-        if choice == 1:
-            monster = Monster(tiny_monsters, "tiny_monsters")
-            battle(monster)
-            player.stats()
-        elif choice == 2:
-            player.health[0] = player.health[1]
-            player.mana[0] = player.mana[1]
-            player.stats()
-        elif choice == 3:
-            player.show_inventory()
-        else:
-            color_print(Fore.RED, "that's not a valid number!")
-    except:
-        color_print(Fore.RED, "that's not a valid number!")
+	try:
+		choice = int(
+			input("What would you like to do? \n"
+					"-1- Adventure \n"
+					"-2- Go to an inn \n"
+					"-3- View inventory\n"))
+		if choice == 1:
+			difficulty = int(input("Which dungeon?\n"
+			"-1- The Plains\n"
+			"-2- The Forest\n"
+			"-3- The Caves\n"
+			"-4- The Bay\n"
+			"-5- Hell\n"))
+			if difficulty == 1:
+				monster = Monster(tiny_monsters, "tiny_monsters")
+			elif difficulty == 2:
+				monster = Monster(medium_monsters, "medium_monsters")
+			elif difficulty == 3:
+				monster = Monster(large_monsters, "large_monsters")
+			elif difficulty == 4:
+				monster = Monster(huge_monsters, "huge_monsters")
+			elif difficulty == 5:
+				monster = Monster(gargantuan_monsters, "gargantuan_monsters")
+			battle(monster)
+			player.stats()
+		elif choice == 2:
+			player.health[0] = player.health[1]
+			player.mana[0] = player.mana[1]
+			player.stats()
+		elif choice == 3:
+			player.show_inventory()
+		else:
+			color_print(Fore.RED, "that's not a valid number!")
+	except:
+		color_print(Fore.RED, "that's not a valid number!")
 
 print("Game Over")

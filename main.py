@@ -171,9 +171,9 @@ class Character:
                            "-3- ATTACK\n"
                            "-4- DEFENCE\n"))
             if allocate == 1:
-                self.health += 1
+                self.health[1] += 1
             elif allocate == 2:
-                self.mana += 1
+                self.mana[1] += 1
             elif allocate == 3:
                 self.attack += 1
             elif allocate == 4:

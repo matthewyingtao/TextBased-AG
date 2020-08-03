@@ -281,3 +281,13 @@ while player.health[0] > 0:
         color_print(Fore.RED, "that's not a valid number!")
 
 print("Game Over")
+
+# TO DO LIST:
+# add a way to choose the difficulty of monsters
+# make the inventory more intuitive to use
+# move stats to a class, for easier access and control
+# add proper try: except: clauses
+# add proper input testing
+# fix the level up input checking
+# add more comments
+# add new inventory system for creating item classes

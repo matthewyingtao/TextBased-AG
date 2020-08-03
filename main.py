@@ -72,17 +72,19 @@ def attack_check():
 
 
 def battle(combat_monster):
-    print(f"You are fighting a {combat_monster.name}")
-    while combat_monster.health > 0 and player.health[0] > 0:
-        damage_calc(player, attacks_list[attack_check()], combat_monster)
-        if combat_monster.health > 0:
-            damage_calc(combat_monster, attacks_list[0], player)
-    if combat_monster.health < 0:
-        color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
-        player.xp[0] += combat_monster.xp
-        player.xp_check()
-    elif player.health[0] < 0:
-        color_print(Fore.RED, f"{combat_monster.name} has defeated you")
+	print(f"You are fighting a {combat_monster.name}")
+	while combat_monster.health > 0 and player.health[0] > 0:
+		damage_calc(player, attacks_list[attack_check()], combat_monster)
+		if combat_monster.health > 0:
+			damage_calc(combat_monster, attacks_list[0], player)
+	if combat_monster.health < 0:
+		color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
+		player.xp[0] += combat_monster.xp
+		player.xp_check()
+		for i in range (random.randint(0, 3)):
+			player.inventory.append(Equipment("Iron", "Sword"))
+	elif player.health[0] < 0:
+		color_print(Fore.RED, f"{combat_monster.name} has defeated you")
 
 
 def get_base_stats(item_type):

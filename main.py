@@ -271,17 +271,20 @@ while player.health[0] > 0:
 			"-1- The Plains\n"
 			"-2- The Forest\n"
 			"-3- The Caves\n"
-			"-4- The Bay\n"
-			"-5- Hell\n"))
+			"-4- The Magic Forest\n"
+			"-5- The Bay\n"
+			"-6- Hell\n"))
 			if difficulty == 1:
 				monster = Monster(tiny_monsters, "tiny_monsters")
 			elif difficulty == 2:
-				monster = Monster(medium_monsters, "medium_monsters")
+				monster = Monster(small_monsters, "small_monsters")
 			elif difficulty == 3:
-				monster = Monster(large_monsters, "large_monsters")
+				monster = Monster(medium_monsters, "medium_monsters")
 			elif difficulty == 4:
-				monster = Monster(huge_monsters, "huge_monsters")
+				monster = Monster(large_monsters, "large_monsters")
 			elif difficulty == 5:
+				monster = Monster(huge_monsters, "huge_monsters")
+			elif difficulty == 6:
 				monster = Monster(gargantuan_monsters, "gargantuan_monsters")
 			battle(monster)
 			player.stats()

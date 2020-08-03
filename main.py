@@ -5,7 +5,7 @@ from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
 
-tier_limits = {"gargantuan_monsters": [50, 10, 10], "huge_monsters": [30, 9, 6], "large_monsters": [25, 8, 5], "medium_monsters": [18, 6, 4], "small_monsters": [13, 5, 3], "tiny_monsters": [10, 3, 2]}
+tier_limits = {"gargantuan_monsters": [50, 10, 10], "huge_monsters": [30, 9, 6], "large_monsters": [25, 8, 5], "medium_monsters": [18, 6, 4], "small_monsters": [13, 3, 3], "tiny_monsters": [8, 0, 2]}
 
 attacks = {
     "Slash": [3, 0.9, 0.1, 0],
@@ -66,7 +66,6 @@ def attack_check():
                 break
         except:
             color_print(Fore.RED, "that's not a valid number!")
-    print("hi2")
     player.mana[0] -= attacks.get(attacks_list[selection])[3]
     print(Style.RESET_ALL)
     return selection
@@ -166,19 +165,21 @@ class Character:
     def level_up(self):
         points = 3
         while points > 0:
-            allocate = int("Allocate points:\n"
+            allocate = int(input("Allocate points:\n"
                            "-1- HEALTH\n"
                            "-2- MANA\n"
                            "-3- ATTACK\n"
-                           "-4- DEFENCE\n")
+                           "-4- DEFENCE\n"))
             if allocate == 1:
                 self.health += 1
-            if allocate == 2:
+            elif allocate == 2:
                 self.mana += 1
-            if allocate == 3:
+            elif allocate == 3:
                 self.attack += 1
-            if allocate == 4:
+            elif allocate == 4:
                 self.defence += 1
+            points -= 1
+
 
     def xp_check(self):
         if self.xp[0] > self.xp[1]:
@@ -187,6 +188,7 @@ class Character:
             # XP to next level follows a logarithmic curve base 10 multiplier.
             self.xp[1] = round((math.log(self.level, 10) + 1) * self.xp[1], 0)
             color_print(Fore.GREEN, "You've leveled up!")
+            self.level_up()
 
     def show_inventory(self):
         print("INVENTORY:")
@@ -216,9 +218,9 @@ class Character:
                     system("clear")
                     break
                 else:
-                    color_print(Fore.RED, "that's not a valid number!\n")
+                    color_print(Fore.RED, "1that's not a valid number!\n")
             except:
-                color_print(Fore.RED, "that's not a valid number!\n")
+                color_print(Fore.RED, "2that's not a valid number!\n")
 
     def equip_item(self, item):
         if item.isEquipped:

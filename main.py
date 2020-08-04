@@ -319,4 +319,3 @@ while True:
     player = Character(name)
   elif choice == 2:
     exit()
-

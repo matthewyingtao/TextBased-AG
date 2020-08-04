@@ -2,9 +2,10 @@ TO DO LIST:
 	Make the inventory more intuitive to use.
 	Move stats to a class, for easier access and control.
 	Add proper try: except: clauses.
-	Add proper input testing.
-	Fix the level up input checking.
 	Add more comments.
 	Add new inventory system for creating item classes.
 	Add new function for handling loot, weighted rolls.
 	Add higher xp values (and loot i guess) for harder monsters.
+  make the inventory easier to understand
+  make a restart method
+  make an item shop

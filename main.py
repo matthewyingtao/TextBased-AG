@@ -20,6 +20,7 @@ implicits_list = list(implicits.keys())
 attacks_list = list(attacks.keys())
 
 
+# pass arguments to print multiple strings in a certain color
 def color_print(color, *args):
     print(f"{color}")
     for string in args:
@@ -50,7 +51,7 @@ def damage_calc(attacker, move, defender):
         print("Miss!")
     print(Style.RESET_ALL)
 
-
+# check if the attack selection exists or can be used
 def attack_check():
     print(f"{Style.RESET_ALL}")
     for index, action in enumerate(attacks.keys()):
@@ -60,6 +61,7 @@ def attack_check():
             selection = int(input()) - 1
             if selection < 0 or selection > (len(attacks) - 1):
                 color_print(Fore.RED, "that's not a valid number!")
+			# check if player has enough mana to use
             elif player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
                 color_print(Fore.RED, "not enough mana!")
             else:
@@ -104,6 +106,7 @@ class Equipment:
         self.isEquipped = False
         player.inventory.append(self)
 
+	# remove mod from an item's stats
     def remove_mod(self):
         self.name = self.name[len(self.mod) + 1:]
         self.health -= self.mod_effect[0]
@@ -113,6 +116,7 @@ class Equipment:
         self.mod = None
         self.mod_effect = [0, 0, 0, 0]
 
+	# roll new mod on item
     def roll_mod(self):
         self.remove_mod()
         self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
@@ -163,6 +167,7 @@ class Character:
 		del self.attributes_keys
 		print(Style.RESET_ALL)
 
+	# allocation of stat points
 	def level_up(self):
 		points = 3
 		while points > 0:
@@ -181,7 +186,7 @@ class Character:
 				self.defence += 1
 			points -= 1
 
-
+	# check xp after battle, and increases the xp requirement for the next level
 	def xp_check(self):
 		if self.xp[0] > self.xp[1]:
 			self.level += 1
@@ -223,6 +228,7 @@ class Character:
 			except:
 				color_print(Fore.RED, "2that's not a valid number!\n")
 
+	# check if an item is equipped before adding/removing stats
 	def equip_item(self, item):
 		if item.isEquipped:
 			self.health[1] -= item.health

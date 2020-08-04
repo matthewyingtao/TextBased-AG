@@ -1,5 +1,4 @@
 TO DO LIST:
-	Add a way to choose the difficulty of monsters.
 	Make the inventory more intuitive to use.
 	Move stats to a class, for easier access and control.
 	Add proper try: except: clauses.

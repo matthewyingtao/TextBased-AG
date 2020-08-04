@@ -225,11 +225,12 @@ class Character:
 		print(inventory_names)
 		while True:
 			inventory_action = input_handler(
-				1, 3, "What would you like to do? \n"
+				1, 4, "What would you like to do? \n"
 				"-1- Re-roll modifier\n"
 				"-2- Equip item\n"
-				"-3- Exit\n")
-			if inventory_action == 1 or inventory_action == 2:
+				"-3- Inspect item\n"
+				"-4- Exit\n")
+			if inventory_action != 4:
 				select_item = input_handler(1, len(self.inventory), "Which item?") - 1
 			if inventory_action == 1:
 				if self.inventory[select_item].isEquipped:
@@ -241,27 +242,26 @@ class Character:
 			elif inventory_action == 2:
 				self.equip_item(self.inventory[select_item])
 			elif inventory_action == 3:
+				self.inventory[select_item].stats()
+			elif inventory_action == 4:
 				system("clear")
 				break
 
 	# check if an item is equipped before adding/removing stats
 	def equip_item(self, item):
 		if item.isEquipped:
-			self.health[1] -= item.health
-			self.mana[1] -= item.mana
-			self.attack -= item.attack
-			self.defence -= item.defence
-			item.isEquipped = False
+			multiplier = 1
 			print(f"You have unequipped {item.name}")
 		else:
-			self.health[0] += item.health
-			self.health[1] += item.health
-			self.mana[0] += item.mana
-			self.mana[1] += item.mana
-			self.attack += item.attack
-			self.defence += item.defence
-			item.isEquipped = True
 			print(f"You have equipped {item.name}")
+			multiplier = -1
+		self.health[0] += item.health * multiplier
+		self.health[1] += item.health * multiplier
+		self.mana[0] += item.mana * multiplier
+		self.mana[1] += item.mana * multiplier
+		self.attack += item.attack * multiplier
+		self.defence += item.defence * multiplier
+		item.isEquipped = not item.isEquipped
 
 
 class Monster:

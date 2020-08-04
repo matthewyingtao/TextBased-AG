@@ -5,12 +5,19 @@ from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
 
-tier_limits = {"gargantuan_monsters": [50, 10, 10], "huge_monsters": [30, 9, 6], "large_monsters": [25, 8, 5], "medium_monsters": [18, 6, 4], "small_monsters": [13, 3, 3], "tiny_monsters": [8, 0, 2]}
+tier_limits = {
+	"gargantuan_monsters": [50, 10, 10],
+	"huge_monsters": [30, 9, 6],
+	"large_monsters": [25, 8, 5],
+	"medium_monsters": [18, 6, 4],
+	"small_monsters": [13, 3, 3],
+	"tiny_monsters": [8, 0, 2]
+}
 
 attacks = {
-    "Slash": [3, 0.9, 0.1, 0],
-    "Fireball": [4, 0.7, 0.25, 1],
-    "Shock": [2, 1, 0.5, 1]
+	"Slash": [3, 0.9, 0.1, 0],
+	"Fireball": [4, 0.7, 0.25, 1],
+	"Shock": [2, 1, 0.5, 1]
 }
 
 equips = {"Sword": [0, 0, 1, 0]}
@@ -18,6 +25,7 @@ equips = {"Sword": [0, 0, 1, 0]}
 implicits_list = list(implicits.keys())
 
 attacks_list = list(attacks.keys())
+
 
 # handles all inputs
 def input_handler(min, max, *strings):
@@ -37,34 +45,35 @@ def input_handler(min, max, *strings):
 
 # pass arguments to print multiple strings in a certain color
 def color_print(color, *args):
-    print(f"{color}")
-    for string in args:
-        print(string)
-    print(f"{Style.RESET_ALL}")
+	print(f"{color}")
+	for string in args:
+		print(string)
+	print(f"{Style.RESET_ALL}")
 
 
 def damage_calc(attacker, move, defender):
-    print(Fore.RED)
-    # get random float between 0-1 and check for miss
-    miss = random.random()
-    if miss < attacks.get(move)[1]:
-        damage = (attacker.attack + attacks.get(move)[0]) - defender.defence
-        # get random float between 0-1 and check for critical hit, doubles damage if true
-        critical_hit = random.random()
-        if critical_hit < attacks.get(move)[2]:
-            damage *= 2
-            color_print(Fore.GREEN, "Critical Hit!")
-        # calculate damage
-        try:
-            defender.health[0] -= damage
-        except:
-            defender.health -= damage
-        print(
-            f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
-        )
-    else:
-        print("Miss!")
-    print(Style.RESET_ALL)
+	print(Fore.RED)
+	# get random float between 0-1 and check for miss
+	miss = random.random()
+	if miss < attacks.get(move)[1]:
+		damage = (attacker.attack + attacks.get(move)[0]) - defender.defence
+		# get random float between 0-1 and check for critical hit, doubles damage if true
+		critical_hit = random.random()
+		if critical_hit < attacks.get(move)[2]:
+			damage *= 2
+			color_print(Fore.GREEN, "Critical Hit!")
+		# calculate damage
+		try:
+			defender.health[0] -= damage
+		except:
+			defender.health -= damage
+		print(
+			f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
+		)
+	else:
+		print("Miss!")
+	print(Style.RESET_ALL)
+
 
 # check if the attack selection exists or can be used
 def attack_check():
@@ -99,56 +108,58 @@ def battle(combat_monster):
 
 
 def get_base_stats(item_type):
-    base_stats = equips.get(item_type)
-    return base_stats
+	base_stats = equips.get(item_type)
+	return base_stats
 
 
 class Equipment:
-    def __init__(self, material, equip_type):
-        self.name = material + " " + equip_type
-        base_stats = get_base_stats(equip_type)
-        self.health = base_stats[0]
-        self.mana = base_stats[1]
-        self.attack = base_stats[2]
-        self.defence = base_stats[3]
-        self.mod = "None"
-        self.mod_effect = [0, 0, 0, 0]
-        self.isEquipped = False
-        player.inventory.append(self)
+	def __init__(self, material, equip_type):
+		self.name = material + " " + equip_type
+		base_stats = get_base_stats(equip_type)
+		self.health = base_stats[0]
+		self.mana = base_stats[1]
+		self.attack = base_stats[2]
+		self.defence = base_stats[3]
+		self.mod = "None"
+		self.mod_effect = [0, 0, 0, 0]
+		self.isEquipped = False
+		player.inventory.append(self)
 
 	# remove mod from an item's stats
-    def remove_mod(self):
-        self.name = self.name[len(self.mod) + 1:]
-        self.health -= self.mod_effect[0]
-        self.mana -= self.mod_effect[1]
-        self.attack -= self.mod_effect[2]
-        self.defence -= self.mod_effect[3]
-        self.mod = None
-        self.mod_effect = [0, 0, 0, 0]
+
+	def remove_mod(self):
+		self.name = self.name[len(self.mod) + 1:]
+		self.health -= self.mod_effect[0]
+		self.mana -= self.mod_effect[1]
+		self.attack -= self.mod_effect[2]
+		self.defence -= self.mod_effect[3]
+		self.mod = None
+		self.mod_effect = [0, 0, 0, 0]
 
 	# roll new mod on item
-    def roll_mod(self):
-        self.remove_mod()
-        self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
-        self.mod_effect = implicits.get(self.mod)
-        self.name = f"{self.mod} {self.name}"
-        self.health += self.mod_effect[0]
-        self.mana += self.mod_effect[1]
-        self.attack += self.mod_effect[2]
-        self.defence += self.mod_effect[3]
 
-    def stats(self):
-        self.attributes = vars(self)
-        self.attributes_keys = list(self.attributes.keys())
-        self.attributes_keys.pop()
-        print(f"{Fore.GREEN}STATS:")
-        for attribute in self.attributes_keys:
-            print(
-                f"{(attribute.replace('_', ' ').upper())}: {self.attributes.get(attribute)}"
-            )
-        del self.attributes
-        del self.attributes_keys
-        print(Style.RESET_ALL)
+	def roll_mod(self):
+		self.remove_mod()
+		self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
+		self.mod_effect = implicits.get(self.mod)
+		self.name = f"{self.mod} {self.name}"
+		self.health += self.mod_effect[0]
+		self.mana += self.mod_effect[1]
+		self.attack += self.mod_effect[2]
+		self.defence += self.mod_effect[3]
+
+	def stats(self):
+		self.attributes = vars(self)
+		self.attributes_keys = list(self.attributes.keys())
+		self.attributes_keys.pop()
+		print(f"{Fore.GREEN}STATS:")
+		for attribute in self.attributes_keys:
+			print(
+				f"{(attribute.replace('_', ' ').upper())}: {self.attributes.get(attribute)}"
+			)
+		del self.attributes
+		del self.attributes_keys
+		print(Style.RESET_ALL)
 
 
 class Character:
@@ -181,11 +192,12 @@ class Character:
 	def level_up(self):
 		points = 3
 		while points > 0:
-			allocate = input_handler(1, 4, "Allocate points:\n"
-							"-1- HEALTH\n"
-							"-2- MANA\n"
-							"-3- ATTACK\n"
-							"-4- DEFENCE\n")
+			allocate = input_handler(
+				1, 4, "Allocate points:\n"
+				"-1- HEALTH\n"
+				"-2- MANA\n"
+				"-3- ATTACK\n"
+				"-4- DEFENCE\n")
 			if allocate == 1:
 				self.health[1] += 1
 			elif allocate == 2:
@@ -214,10 +226,11 @@ class Character:
 		print(inventory_names)
 		while True:
 			try:
-				inventory_action = input_handler(1, 3, "What would you like to do? \n"
-							"-1- Re-roll modifier\n"
-							"-2- Equip item\n"
-							"-3- Exit\n")
+				inventory_action = input_handler(
+					1, 3, "What would you like to do? \n"
+					"-1- Re-roll modifier\n"
+					"-2- Equip item\n"
+					"-3- Exit\n")
 				if inventory_action == 1 or inventory_action == 2:
 					select_item = int(input("Which item?\n")) - 1
 				if inventory_action == 1:
@@ -276,18 +289,20 @@ player.stats()
 
 while player.health[0] > 0:
 	try:
-		choice = input_handler(1, 3, "What would you like to do? \n"
-					"-1- Adventure \n"
-					"-2- Go to an inn \n"
-					"-3- View inventory\n")
+		choice = input_handler(
+			1, 3, "What would you like to do? \n"
+			"-1- Adventure \n"
+			"-2- Go to an inn \n"
+			"-3- View inventory\n")
 		if choice == 1:
-			difficulty = input_handler(1, 6, "Which dungeon?\n"
-			"-1- The Plains\n"
-			"-2- The Forest\n"
-			"-3- The Caves\n"
-			"-4- The Magic Forest\n"
-			"-5- The Bay\n"
-			"-6- Hell\n")
+			difficulty = input_handler(
+				1, 6, "Which dungeon?\n"
+				"-1- The Plains\n"
+				"-2- The Forest\n"
+				"-3- The Caves\n"
+				"-4- The Magic Forest\n"
+				"-5- The Bay\n"
+				"-6- Hell\n")
 			if difficulty == 1:
 				monster = Monster(tiny_monsters, "tiny_monsters")
 			elif difficulty == 2:

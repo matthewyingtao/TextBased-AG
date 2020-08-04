@@ -123,7 +123,6 @@ class Equipment:
 		self.mod = "None"
 		self.mod_effect = [0, 0, 0, 0]
 		self.isEquipped = False
-		player.inventory.append(self)
 
 	# remove mod from an item's stats
 
@@ -224,6 +223,7 @@ class Character:
 		for item in self.inventory:
 			inventory_names.append(item.name)
 		print(inventory_names)
+		print(self.inventory)
 		while True:
 			try:
 				inventory_action = input_handler(
@@ -281,9 +281,8 @@ class Monster:
 
 player = Character()
 
-dog = Equipment("Iron", "Sword")
-dog.roll_mod()
-dog.stats()
+
+player.inventory.append(Equipment("Iron", "Sword"))
 
 player.stats()
 

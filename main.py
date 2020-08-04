@@ -19,6 +19,21 @@ implicits_list = list(implicits.keys())
 
 attacks_list = list(attacks.keys())
 
+# handles all inputs
+def input_handler(min, max, *strings):
+	for string in strings:
+		print(string)
+	while True:
+		try:
+			choice = int(input())
+			if choice < min or choice > max:
+				color_print(Fore.RED, "Number is too high/low!")
+			else:
+				break
+		except:
+			color_print(Fore.RED, "Enter a number!")
+	return choice
+
 
 # pass arguments to print multiple strings in a certain color
 def color_print(color, *args):
@@ -53,24 +68,19 @@ def damage_calc(attacker, move, defender):
 
 # check if the attack selection exists or can be used
 def attack_check():
-    print(f"{Style.RESET_ALL}")
-    for index, action in enumerate(attacks.keys()):
-        print(f"-{index + 1}- {action}")
-    while True:
-        try:
-            selection = int(input()) - 1
-            if selection < 0 or selection > (len(attacks) - 1):
-                color_print(Fore.RED, "that's not a valid number!")
-			# check if player has enough mana to use
-            elif player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
-                color_print(Fore.RED, "not enough mana!")
-            else:
-                break
-        except:
-            color_print(Fore.RED, "that's not a valid number!")
-    player.mana[0] -= attacks.get(attacks_list[selection])[3]
-    print(Style.RESET_ALL)
-    return selection
+	print(f"{Style.RESET_ALL}")
+	for index, action in enumerate(attacks.keys()):
+		print(f"-{index + 1}- {action}")
+	while True:
+		selection = input_handler(0, (len(attacks))) - 1
+		# check if player has enough mana to use
+		if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
+			color_print(Fore.RED, "not enough mana!")
+		else:
+			break
+	player.mana[0] -= attacks.get(attacks_list[selection])[3]
+	print(Style.RESET_ALL)
+	return selection
 
 
 def battle(combat_monster):

@@ -63,10 +63,7 @@ def damage_calc(attacker, move, defender):
 			damage *= 2
 			color_print(Fore.GREEN, "Critical Hit!")
 		# calculate damage
-		try:
-			defender.health[0] -= damage
-		except:
-			defender.health -= damage
+		defender.health[0] -= damage
 		print(
 			f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
 		)

@@ -35,7 +35,7 @@ def input_handler(min, max, *strings):
 		try:
 			choice = int(input())
 			if choice < min or choice > max:
-				color_print(Fore.RED, "Number is too high/low!")
+				color_print(Fore.RED, f"Input must be between {min} and {max}")
 			else:
 				break
 		except:
@@ -232,7 +232,7 @@ class Character:
 					"-2- Equip item\n"
 					"-3- Exit\n")
 				if inventory_action == 1 or inventory_action == 2:
-					select_item = int(input("Which item?\n")) - 1
+					select_item = input_handler(1, len(self.inventory), "Which item?") - 1
 				if inventory_action == 1:
 					if self.inventory[select_item].isEquipped:
 						color_print(Fore.RED, "Can't re-roll while equipped")

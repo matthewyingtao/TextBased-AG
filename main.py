@@ -220,41 +220,40 @@ class Character:
 	def show_inventory(self):
 		print("INVENTORY:")
 		inventory_names = []
+		# make list of names from inventory items
 		for item in self.inventory:
 			inventory_names.append(item.name)
 		print(inventory_names)
-		while True:
-			inventory_action = input_handler(
-				1, 4, "What would you like to do? \n"
-				"-1- Re-roll modifier\n"
-				"-2- Equip item\n"
-				"-3- Inspect item\n"
-				"-4- Exit\n")
-			if inventory_action != 4:
-				select_item = input_handler(1, len(self.inventory), "Which item?") - 1
-			if inventory_action == 1:
-				if self.inventory[select_item].isEquipped:
-					color_print(Fore.RED, "Can't re-roll while equipped")
-				else:
-					self.inventory[select_item].roll_mod()
-					self.inventory[select_item].stats()
-					color_print(Fore.GREEN, "Mod re-rolled\n")
-			elif inventory_action == 2:
-				self.equip_item(self.inventory[select_item])
-			elif inventory_action == 3:
+		inventory_action = input_handler(
+			1, 4, "What would you like to do? \n"
+			"-1- Re-roll modifier\n"
+			"-2- Equip item\n"
+			"-3- Inspect item\n"
+			"-4- Exit\n")
+		if inventory_action != 4:
+			select_item = input_handler(1, len(self.inventory), "Which item?") - 1
+		if inventory_action == 1:
+			if self.inventory[select_item].isEquipped:
+				color_print(Fore.RED, "Can't re-roll while equipped")
+			else:
+				self.inventory[select_item].roll_mod()
 				self.inventory[select_item].stats()
-			elif inventory_action == 4:
-				system("clear")
-				break
+				color_print(Fore.GREEN, "Mod re-rolled\n")
+		elif inventory_action == 2:
+			self.equip_item(self.inventory[select_item])
+		elif inventory_action == 3:
+			self.inventory[select_item].stats()
+		elif inventory_action == 4:
+			system("clear")
 
 	# check if an item is equipped before adding/removing stats
 	def equip_item(self, item):
 		if item.isEquipped:
-			multiplier = 1
+			multiplier = -1
 			print(f"You have unequipped {item.name}")
 		else:
+			multiplier = 1
 			print(f"You have equipped {item.name}")
-			multiplier = -1
 		self.health[0] += item.health * multiplier
 		self.health[1] += item.health * multiplier
 		self.mana[0] += item.mana * multiplier

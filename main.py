@@ -72,7 +72,7 @@ def attack_check():
 	for index, action in enumerate(attacks.keys()):
 		print(f"-{index + 1}- {action}")
 	while True:
-		selection = input_handler(0, (len(attacks))) - 1
+		selection = input_handler(1, (len(attacks))) - 1
 		# check if player has enough mana to use
 		if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
 			color_print(Fore.RED, "not enough mana!")
@@ -181,11 +181,11 @@ class Character:
 	def level_up(self):
 		points = 3
 		while points > 0:
-			allocate = int(input("Allocate points:\n"
+			allocate = input_handler(1, 4, "Allocate points:\n"
 							"-1- HEALTH\n"
 							"-2- MANA\n"
 							"-3- ATTACK\n"
-							"-4- DEFENCE\n"))
+							"-4- DEFENCE\n")
 			if allocate == 1:
 				self.health[1] += 1
 			elif allocate == 2:
@@ -214,11 +214,10 @@ class Character:
 		print(inventory_names)
 		while True:
 			try:
-				inventory_action = int(
-					input("What would you like to do? \n"
+				inventory_action = input_handler(1, 3, "What would you like to do? \n"
 							"-1- Re-roll modifier\n"
 							"-2- Equip item\n"
-							"-3- Exit\n"))
+							"-3- Exit\n")
 				if inventory_action == 1 or inventory_action == 2:
 					select_item = int(input("Which item?\n")) - 1
 				if inventory_action == 1:
@@ -277,19 +276,18 @@ player.stats()
 
 while player.health[0] > 0:
 	try:
-		choice = int(
-			input("What would you like to do? \n"
+		choice = input_handler(1, 3, "What would you like to do? \n"
 					"-1- Adventure \n"
 					"-2- Go to an inn \n"
-					"-3- View inventory\n"))
+					"-3- View inventory\n")
 		if choice == 1:
-			difficulty = int(input("Which dungeon?\n"
+			difficulty = input_handler(1, 6, "Which dungeon?\n"
 			"-1- The Plains\n"
 			"-2- The Forest\n"
 			"-3- The Caves\n"
 			"-4- The Magic Forest\n"
 			"-5- The Bay\n"
-			"-6- Hell\n"))
+			"-6- Hell\n")
 			if difficulty == 1:
 				monster = Monster(tiny_monsters, "tiny_monsters")
 			elif difficulty == 2:

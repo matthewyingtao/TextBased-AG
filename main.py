@@ -223,32 +223,26 @@ class Character:
 		for item in self.inventory:
 			inventory_names.append(item.name)
 		print(inventory_names)
-		print(self.inventory)
 		while True:
-			try:
-				inventory_action = input_handler(
-					1, 3, "What would you like to do? \n"
-					"-1- Re-roll modifier\n"
-					"-2- Equip item\n"
-					"-3- Exit\n")
-				if inventory_action == 1 or inventory_action == 2:
-					select_item = input_handler(1, len(self.inventory), "Which item?") - 1
-				if inventory_action == 1:
-					if self.inventory[select_item].isEquipped:
-						color_print(Fore.RED, "Can't re-roll while equipped")
-					else:
-						self.inventory[select_item].roll_mod()
-						self.inventory[select_item].stats()
-						color_print(Fore.GREEN, "Mod re-rolled\n")
-				elif inventory_action == 2:
-					self.equip_item(self.inventory[select_item])
-				elif inventory_action == 3:
-					system("clear")
-					break
+			inventory_action = input_handler(
+				1, 3, "What would you like to do? \n"
+				"-1- Re-roll modifier\n"
+				"-2- Equip item\n"
+				"-3- Exit\n")
+			if inventory_action == 1 or inventory_action == 2:
+				select_item = input_handler(1, len(self.inventory), "Which item?") - 1
+			if inventory_action == 1:
+				if self.inventory[select_item].isEquipped:
+					color_print(Fore.RED, "Can't re-roll while equipped")
 				else:
-					color_print(Fore.RED, "1that's not a valid number!\n")
-			except:
-				color_print(Fore.RED, "2that's not a valid number!\n")
+					self.inventory[select_item].roll_mod()
+					self.inventory[select_item].stats()
+					color_print(Fore.GREEN, "Mod re-rolled\n")
+			elif inventory_action == 2:
+				self.equip_item(self.inventory[select_item])
+			elif inventory_action == 3:
+				system("clear")
+				break
 
 	# check if an item is equipped before adding/removing stats
 	def equip_item(self, item):

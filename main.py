@@ -160,9 +160,8 @@ class Equipment:
 
 
 class Character:
-  def __init__(self):
-    self.name = input("what is your name? \n")
-    system("clear")
+  def __init__(self, name):
+    self.name = name
     self.health = [10, 10]
     self.mana = [5, 5]
     self.attack = 3
@@ -268,8 +267,10 @@ class Monster:
 		self.defence = tier_limits.get(tier)[2]
 		self.xp = random.randint(20, 40)
 
+name = input("what is your name? \n")
+system("clear")
 
-player = Character()
+player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
 
@@ -315,7 +316,7 @@ while True:
       "-1- restart\n"
       "-2- exit\n")
   if choice == 1:
-    player = Character()
+    player = Character(name)
   elif choice == 2:
     exit()
 

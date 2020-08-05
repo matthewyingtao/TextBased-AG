@@ -21,7 +21,9 @@ attacks = {
 }
 
 # list of equippable items 
-equips = {"Sword": [0, 0, 1, 0], "Armour": [1, 0, 0, 1]}
+equips = {"Sword": [0, 0, 1, 0], "Body Armour": [1, 0, 0, 1], "Helmet": [2, 0, 0, 1], "Ring": [0, 1, 1, 0]}
+
+materials = {"Iron": 1, "Bronze": 1.5}
 
 # list of monster lists by difficulty
 monster_tiers = [tiny_monsters, small_monsters, medium_monsters, large_monsters, huge_monsters, gargantuan_monsters]

@@ -1,6 +1,5 @@
 TO DO LIST:
-	Add proper try: except: clauses.///do we still need to do this with the added numbercheking thing you did last night///
-  
+	Add proper try: except: clauses. /"possibly don't need to, but i need to research more"/
 	Add more comments.
 	Add new function for handling loot, weighted rolls.
 	Add higher xp values (and loot i guess) for harder monsters.

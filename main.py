@@ -6,12 +6,12 @@ from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_
 from colorama import Fore, Style
 
 tier_limits = {
-    "gargantuan_monsters": [50, 10, 10],
-    "huge_monsters": [30, 9, 6],
-    "large_monsters": [25, 8, 5],
-    "medium_monsters": [18, 6, 4],
-    "small_monsters": [13, 3, 3],
-    "tiny_monsters": [8, 0, 2]
+    "gargantuan_monsters": [50, 10, 10, 800, 1000],
+    "huge_monsters": [30, 9, 6, 400, 550],
+    "large_monsters": [25, 8, 5, 180, 250],
+    "medium_monsters": [18, 6, 4, 80, 120],
+    "small_monsters": [13, 3, 3, 40, 80],
+    "tiny_monsters": [8, 0, 2, 20, 40]
 }
 
 attacks = {
@@ -257,15 +257,15 @@ class Character:
 
 
 class Monster:
-    def __init__(self, tier_list, tier):
-        self.name = random.choice(list(tier_list))
-        self.health = tier_limits.get(tier)[0]
-        self.attack = tier_limits.get(tier)[1]
-        self.defence = tier_limits.get(tier)[2]
-        self.xp = random.randint(20, 40)
+	def __init__(self, tier_list, tier):
+		self.name = random.choice(list(tier_list))
+		self.health = tier_limits.get(tier)[0]
+		self.attack = tier_limits.get(tier)[1]
+		self.defence = tier_limits.get(tier)[2]
+		self.xp = random.randint(tier_limits.get(tier)[3], tier_limits.get(tier)[4])
 
-    def stats(self):
-        self.print_stats = Stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
+	def stats(self):
+		self.print_stats = Stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
 
 
 name = input("what is your name? \n")

@@ -5,8 +5,6 @@ from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
 
-"""idk know if it's you ash but DONT PRESS AUTO FORMAT CAUSE IT SCREWS EVERYTHING UP PLEASE"""
-
 tier_limits = {
     "gargantuan_monsters": [50, 10, 10],
     "huge_monsters": [30, 9, 6],
@@ -22,8 +20,10 @@ attacks = {
     "Shock": [2, 1, 0.5, 1]
 }
 
+#this is the sword
 equips = {"Sword": [0, 0, 1, 0]}
 
+#this is a function to odrder the monster tiers easiest to hardest
 monster_tiers = [tiny_monsters, small_monsters, medium_monsters, large_monsters, huge_monsters, gargantuan_monsters]
 
 monster_tiers_names = ["tiny_monsters", "small_monsters", "medium_monsters", "large_monsters", "huge_monsters",
@@ -98,7 +98,7 @@ def attack_check():
     print(Style.RESET_ALL)
     return selection
 
-
+#battle function for when you fight a monster
 def battle(combat_monster):
     print(f"You are fighting a {combat_monster.name}")
     while combat_monster.health > 0 and player.health[0] > 0:

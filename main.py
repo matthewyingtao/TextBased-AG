@@ -23,7 +23,7 @@ attacks = {
 # list of equippable items 
 equips = {"Sword": [0, 0, 1, 0], "Armour": [1, 0, 0, 1]}
 
-# list of monster lists
+# list of monster lists by difficulty
 monster_tiers = [tiny_monsters, small_monsters, medium_monsters, large_monsters, huge_monsters, gargantuan_monsters]
 
 monster_tiers_names = ["tiny_monsters", "small_monsters", "medium_monsters", "large_monsters", "huge_monsters",
@@ -61,7 +61,9 @@ def color_print(color, *args):
 def loot():
 	if random.choice([True, False]):
 		item_type = random.randint(0, (len(equips_list) - 1))
-		player.inventory.append(Equipment("Iron", "Sword"))
+		player.inventory.append(Equipment("Iron", equips_list[item_type]))
+		if random.randint(0, 100) > 70:
+			player.inventory[-1].roll_mod()
 	else:
 		print("No loot dropped")
 
@@ -117,7 +119,7 @@ def battle(combat_monster):
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
-        player.inventory.append(Equipment("Iron", "Sword"))
+        loot()
     elif player.health[0] < 0:
         color_print(Fore.RED, f"{combat_monster.name} has defeated you")
 

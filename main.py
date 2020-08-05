@@ -22,6 +22,10 @@ attacks = {
 
 equips = {"Sword": [0, 0, 1, 0]}
 
+monster_tiers = [tiny_monsters, small_monsters, medium_monsters, large_monsters, huge_monsters, gargantuan_monsters]
+
+monster_tiers_names = ["tiny_monsters", "small_monsters", "medium_monsters", "large_monsters", "huge_monsters", "gargantuan_monsters"]
+
 implicits_list = list(implicits.keys())
 
 attacks_list = list(attacks.keys())
@@ -63,7 +67,10 @@ def damage_calc(attacker, move, defender):
 			damage *= 2
 			color_print(Fore.GREEN, "Critical Hit!")
 		# calculate damage
-		defender.health[0] -= damage
+		try:
+			defender.health[0] -= damage
+		except:
+			defender.health -= damage
 		print(
 			f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
 		)
@@ -272,47 +279,36 @@ player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
 
 while True:
-  while player.health[0] > 0:
-    choice = input_handler(
-      1, 3, "What would you like to do? \n"
-      "-1- Adventure \n"
-      "-2- Go to an inn \n"
-      "-3- View inventory\n")
-    if choice == 1:
-      difficulty = input_handler(
-        1, 6, "Which dungeon?\n"
-        "-1- The Plains\n"
-        "-2- The Forest\n"
-        "-3- The Caves\n"
-        "-4- The Magic Forest\n"
-        "-5- The Bay\n"
-        "-6- Hell\n")
-      if difficulty == 1:
-        monster = Monster(tiny_monsters, "tiny_monsters")
-      elif difficulty == 2:
-        monster = Monster(small_monsters, "small_monsters")
-      elif difficulty == 3:
-        monster = Monster(medium_monsters, "medium_monsters")
-      elif difficulty == 4:
-        monster = Monster(large_monsters, "large_monsters")
-      elif difficulty == 5:
-        monster = Monster(huge_monsters, "huge_monsters")
-      elif difficulty == 6:
-        monster = Monster(gargantuan_monsters, "gargantuan_monsters")
-      battle(monster)
-      player.stats()
-    elif choice == 2:
-      player.health[0] = player.health[1]
-      player.mana[0] = player.mana[1]
-      player.stats()
-    elif choice == 3:
-      player.show_inventory()
-  
-  choice = input_handler(
-      1, 2, "Game Over\n"
-      "-1- restart\n"
-      "-2- exit\n")
-  if choice == 1:
-    player = Character(name)
-  elif choice == 2:
-    exit()
+	while player.health[0] > 0:
+		choice = input_handler(
+		1, 3, "What would you like to do? \n"
+		"-1- Adventure \n"
+		"-2- Go to an inn \n"
+		"-3- View inventory\n")
+		if choice == 1:
+			difficulty = input_handler(
+			1, 6, "Which dungeon?\n"
+			"-1- The Plains\n"
+			"-2- The Forest\n"
+			"-3- The Caves\n"
+			"-4- The Magic Forest\n"
+			"-5- The Bay\n"
+			"-6- Hell\n")
+			monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
+			battle(monster)
+			player.stats()
+		elif choice == 2:
+			player.health[0] = player.health[1]
+			player.mana[0] = player.mana[1]
+			player.stats()
+		elif choice == 3:
+			player.show_inventory()
+
+	choice = input_handler(
+		1, 2, "Game Over\n"
+		"-1- restart\n"
+		"-2- exit\n")
+	if choice == 1:
+		player = Character(name)
+	elif choice == 2:
+		exit()

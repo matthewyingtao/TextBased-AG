@@ -259,12 +259,9 @@ class Monster:
 		self.attack = tier_limits.get(tier)[1]
 		self.defence = tier_limits.get(tier)[2]
 		self.xp = random.randint(20, 40)
-		
 
 	def stats(self):
 		self.print_stats = Stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
-
-monster = Monster(monster_tiers[1], monster_tiers_names[1])
 
 name = input("what is your name? \n")
 system("clear")

@@ -1,10 +1,10 @@
 TO DO LIST:
 	Add proper try: except: clauses. /"possibly don't need to, but i need to research more"/
-	Add more comments.
-	Add new function for handling loot, weighted rolls.
+	Add weighted rolls to loot function.
 	Add higher xp values (and loot i guess) for harder monsters.
 	make an item shop /"not sure if this is something we wanna do until we get some consumables"/
+	use materials as multiplier for equip base stats
 
 
 LONG TERM GOALS:
-	allow progress saving /"probrably not going to do this till the end, only need to save the player object"/
+	allow progress saving /"probrably not going to do this till the end, only need to save the player object + attributes"/

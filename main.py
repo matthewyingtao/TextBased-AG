@@ -62,10 +62,11 @@ def color_print(color, *args):
 
 def loot():
 	if random.choice([True, False]):
-		item_type = random.randint(0, (len(equips_list) - 1))
-		player.inventory.append(Equipment("Iron", equips_list[item_type]))
+		item_type = random.choice(equips_list)
+		player.inventory.append(Equipment("Iron", item_type))
 		if random.randint(0, 100) > 70:
 			player.inventory[-1].roll_mod()
+		print(f"{player.inventory[-1].name} has dropped")
 	else:
 		print("No loot dropped")
 

@@ -1,6 +1,6 @@
 import random
 from os import system
-import math as math
+import math
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
@@ -39,18 +39,19 @@ equips_list = list(equips.keys())
 
 # handles all numeric inputs
 def input_handler(min_input, max_input, *strings):
-    for string in strings:
-        print(string)
-    while True:
-        try:
-            choice = int(input())
-            if choice < min_input or choice > max_input:
-                color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
-            else:
-                break
-        except:
-            color_print(Fore.RED, "Enter a number!")
-    return choice
+	for string in strings:
+		print(string)
+	while True:
+		try:
+			choice = int(input())
+			if choice < min_input or choice > max_input:
+				color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
+			elif choice == 0:
+				exit()
+			else:
+				return choice
+		except ValueError:
+			color_print(Fore.RED, "Enter a number!")
 
 
 # pass arguments to print multiple strings in a certain color
@@ -99,7 +100,7 @@ def attack_check():
     for index, action in enumerate(attacks.keys()):
         print(f"-{index + 1}- {action}")
     while True:
-        selection = input_handler(1, (len(attacks))) - 1
+        selection = input_handler(0, (len(attacks))) - 1
         # check if player has enough mana to use
         if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
             color_print(Fore.RED, "not enough mana!")
@@ -200,7 +201,7 @@ class Character:
         points = 3
         while points > 0:
             allocate = input_handler(
-                1, 4, "Allocate points:\n"
+                0, 4, "Allocate points:\n"
                       "-1- HEALTH\n"
                       "-2- MANA\n"
                       "-3- ATTACK\n"
@@ -231,7 +232,7 @@ class Character:
         for item in self.inventory:
             print(f"({self.inventory.index(item) + 1}) {item.name}")
         inventory_action = input_handler(
-            1, 5, "What would you like to do? \n"
+            0, 5, "What would you like to do? \n"
                   "-1- Re-roll modifier\n"
                   "-2- Equip item\n"
                   "-3- Inspect item\n"
@@ -240,7 +241,7 @@ class Character:
         )
         # if action isn't exit, select item
         if inventory_action != 4:
-            select_item = input_handler(1, len(self.inventory), "Which item?") - 1
+            select_item = input_handler(0, len(self.inventory), "Which item?") - 1
         if inventory_action == 1:
             if self.inventory[select_item].isEquipped:
                 color_print(Fore.RED, "Can't re-roll while equipped")
@@ -296,13 +297,13 @@ player.stats()
 while True:
     while player.health[0] > 0:
         choice = input_handler(
-            1, 3, "What would you like to do? \n"
+            0, 3, "What would you like to do? \n"
                   "-1- Adventure \n"
                   "-2- Go to an inn \n"
                   "-3- View inventory\n")
         if choice == 1:
             difficulty = input_handler(
-                1, 6, "Which dungeon?\n"
+                0, 6, "Which dungeon?\n"
                       "-1- The Plains\n"
                       "-2- The Forest\n"
                       "-3- The Caves\n"
@@ -320,7 +321,7 @@ while True:
             player.show_inventory()
 
     choice = input_handler(
-        1, 2, "Game Over\n"
+        0, 2, "Game Over\n"
               "-1- restart\n"
               "-2- exit\n")
     if choice == 1:

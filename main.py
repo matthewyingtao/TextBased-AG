@@ -1,6 +1,6 @@
 import random
 from os import system
-from math import ceil, log
+from math import ceil, log, prod
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
@@ -148,11 +148,11 @@ def print_stats(**stats):
 class Equipment:
     def __init__(self, material, equip_type):
         self.name = material + " " + equip_type
-        base_stats = get_base_stats(equip_type)
-        self.health = ceil(base_stats[0] * materials.get(material))
-        self.mana = ceil(base_stats[1] * materials.get(material))
-        self.attack = ceil(base_stats[2] * materials.get(material))
-        self.defence = ceil(base_stats[3] * materials.get(material))
+        base_stats = [ceil(materials.get(material) * stat) for stat in (get_base_stats(equip_type))]
+        self.health = base_stats[0]
+        self.mana = base_stats[1]
+        self.attack = base_stats[2]
+        self.defence = base_stats[3]
         self.mod = None
         self.mod_effect = [0, 0, 0, 0]
         self.isEquipped = False
@@ -281,7 +281,7 @@ class Monster:
     def stats(self):
         print_stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
 
-name = input("what is your name? \n")
+name = input("What's your name? \n")
 system("clear")
 
 player = Character(name)

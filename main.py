@@ -93,33 +93,35 @@ def damage_calc(attacker, move, defender):
 
 # check if the attack selection exists or can be used
 def attack_check():
-    for index, action in enumerate(attacks.keys()):
-        print(f"-{index + 1}- {action}")
-    while True:
-        selection = input_handler(0, (len(attacks))) - 1
-        # check if player has enough mana to use
-        if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
-            color_print(Fore.RED, "not enough mana!")
-        else:
-            break
-    player.mana[0] -= attacks.get(attacks_list[selection])[3]
-    return selection
+	for index, action in enumerate(attacks.keys()):
+		print(f"-{index + 1}- {action}")
+	print()
+	while True:
+		selection = input_handler(0, (len(attacks))) - 1
+		# check if player has enough mana to use
+		if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
+			color_print(Fore.RED, "not enough mana!")
+		else:
+			break
+	player.mana[0] -= attacks.get(attacks_list[selection])[3]
+	return selection
 
 
 # battle function for when you fight a monster
 def battle(combat_monster):
-    while combat_monster.health[0] > 0 and player.health[0] > 0:
-        combat_monster.stats()
-        damage_calc(player, attacks_list[attack_check()], combat_monster)
-        if combat_monster.health[0] > 0:
-            damage_calc(combat_monster, attacks_list[0], player)
-    if combat_monster.health[0] < 0:
-        color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
-        player.xp[0] += combat_monster.xp
-        player.xp_check()
-        loot()
-    elif player.health[0] < 0:
-        color_print(Fore.RED, f"{combat_monster.name} has defeated you")
+	while combat_monster.health[0] > 0 and player.health[0] > 0:
+		combat_monster.stats()
+		damage_calc(player, attacks_list[attack_check()], combat_monster)
+		if combat_monster.health[0] > 0:
+			damage_calc(combat_monster, attacks_list[0], player)
+	if combat_monster.health[0] < 0:
+		system("clear")
+		color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
+		player.xp[0] += combat_monster.xp
+		player.xp_check()
+		loot()
+	elif player.health[0] < 0:
+		color_print(Fore.RED, f"{combat_monster.name} has defeated you")
 
 
 def get_base_stats(item_type):
@@ -227,6 +229,7 @@ class Character:
 		# make list of names from inventory items before printing
 		for item in self.inventory:
 			print(f"({self.inventory.index(item) + 1}) {item.name}")
+		print()
 		inventory_action = input_handler(
 			0, 3, "What would you like to do? \n"
 					"-1- Re-roll modifier\n"
@@ -245,6 +248,7 @@ class Character:
 			self.equip_item(self.inventory[select_item])
 		elif inventory_action == 3:
 			self.inventory[select_item].stats()
+		system("clear")
 
 	# check if an item is equipped before adding/removing stats
 	def equip_item(self, item):

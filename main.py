@@ -77,7 +77,6 @@ def loot():
 
 
 def damage_calc(attacker, move, defender):
-    print(Fore.RED)
     # get random float between 0-1 and check for miss
     miss = random.random()
     if miss < attacks.get(move)[1]:
@@ -89,17 +88,14 @@ def damage_calc(attacker, move, defender):
             color_print(Fore.GREEN, "Critical Hit!")
         # calculate damage
         defender.health[0] -= damage
-        print(
-            f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
+        color_print(Fore.RED, f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
         )
     else:
         print("Miss!")
-    print(Style.RESET_ALL)
 
 
 # check if the attack selection exists or can be used
 def attack_check():
-    print(f"{Style.RESET_ALL}")
     for index, action in enumerate(attacks.keys()):
         print(f"-{index + 1}- {action}")
     while True:
@@ -110,13 +106,11 @@ def attack_check():
         else:
             break
     player.mana[0] -= attacks.get(attacks_list[selection])[3]
-    print(Style.RESET_ALL)
     return selection
 
 
 # battle function for when you fight a monster
 def battle(combat_monster):
-    print(f"You are fighting a {combat_monster.name}")
     while combat_monster.health[0] > 0 and player.health[0] > 0:
         combat_monster.stats()
         damage_calc(player, attacks_list[attack_check()], combat_monster)
@@ -307,6 +301,7 @@ while True:
 						"-4- The Magic Forest\n"
 						"-5- The Bay\n"
 						"-6- Hell\n")
+			system("clear")
 			monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
 			battle(monster)
 			player.stats()

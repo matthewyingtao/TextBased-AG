@@ -141,6 +141,7 @@ def print_stats(**stats):
 class Equipment:
 	def __init__(self, material, equip_type):
 		self.name = material + " " + equip_type
+		self.type = equip_type
 		base_stats = [ceil(materials.get(material) * stat) for stat in (get_base_stats(equip_type))]
 		self.health = base_stats[0]
 		self.mana = base_stats[1]
@@ -189,6 +190,7 @@ class Character:
 		self.xp = [0, 50]
 		self.level = 1
 		self.inventory = []
+		self.equipment = []
 
 	def stats(self):
 		print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
@@ -257,9 +259,14 @@ class Character:
 		if item.isEquipped:
 			multiplier = -1
 			print(f"You have unequipped {item.name}\n")
-		else:
+			self.equipment.remove(item.type)
+		elif not (item.type in self.equipment):
 			multiplier = 1
 			print(f"You have equipped {item.name}\n")
+			self.equipment.append(item.type)
+		else:
+			print("You already have an item of the same type equipped!\n")
+			multiplier = 0
 		self.health[0] += item.health * multiplier
 		self.health[1] += item.health * multiplier
 		self.mana[0] += item.mana * multiplier
@@ -323,5 +330,6 @@ while True:
 				"-2- exit\n")
 	if restart == 1:
 		player = Character(name)
+		player.inventory.append(Equipment("Iron", "Sword"))
 	elif restart == 2:
 		exit()

@@ -239,8 +239,6 @@ class Character:
                   "-1- Re-roll modifier\n"
                   "-2- Equip item\n"
                   "-3- Inspect item\n"
-                  "-4- Shop\n"
-                  "-5- Exit\n"
         )
         # if action isn't exit, select item
         if inventory_action != 4:
@@ -256,10 +254,6 @@ class Character:
             self.equip_item(self.inventory[select_item])
         elif inventory_action == 3:
             self.inventory[select_item].stats()
-        # elif inventory_action == 4:
-
-        elif inventory_action == 5:
-            exit()
 
     # check if an item is equipped before adding/removing stats
     def equip_item(self, item):
@@ -297,36 +291,39 @@ player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
 
 while True:
-    while player.health[0] > 0:
-        choice = input_handler(
-            0, 3, "What would you like to do? \n"
-                  "-1- Adventure \n"
-                  "-2- Go to an inn \n"
-                  "-3- View inventory\n")
-        if choice == 1:
-            difficulty = input_handler(
-                0, 6, "Which dungeon?\n"
-                      "-1- The Plains\n"
-                      "-2- The Forest\n"
-                      "-3- The Caves\n"
-                      "-4- The Magic Forest\n"
-                      "-5- The Bay\n"
-                      "-6- Hell\n")
-            monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
-            battle(monster)
-            player.stats()
-        elif choice == 2:
-            player.health[0] = player.health[1]
-            player.mana[0] = player.mana[1]
-            player.stats()
-        elif choice == 3:
-            player.show_inventory()
+	while player.health[0] > 0:
+		choice = input_handler(
+			0, 3, "What would you like to do? \n"
+					"-1- Adventure \n"
+					"-2- Go to an inn \n"
+					"-3- View inventory\n"
+					"-4- Shop\n")
+		if choice == 1:
+			difficulty = input_handler(
+				0, 6, "Which dungeon?\n"
+						"-1- The Plains\n"
+						"-2- The Forest\n"
+						"-3- The Caves\n"
+						"-4- The Magic Forest\n"
+						"-5- The Bay\n"
+						"-6- Hell\n")
+			monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
+			battle(monster)
+			player.stats()
+		elif choice == 2:
+			player.health[0] = player.health[1]
+			player.mana[0] = player.mana[1]
+			player.stats()
+		elif choice == 3:
+			player.show_inventory()
+		elif choice == 4:
+			print("Not added yet!")
 
-    restart = input_handler(
-        0, 2, "Game Over\n"
-              "-1- restart\n"
-              "-2- exit\n")
-    if restart == 1:
-        player = Character(name)
-    elif restart == 2:
-        exit()
+	restart = input_handler(
+		0, 2, "Game Over\n"
+				"-1- restart\n"
+				"-2- exit\n")
+	if restart == 1:
+		player = Character(name)
+	elif restart == 2:
+		exit()

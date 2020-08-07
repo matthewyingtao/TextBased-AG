@@ -241,14 +241,16 @@ class Character:
 			if self.inventory[select_item].isEquipped:
 				color_print(Fore.RED, "Can't re-roll while equipped")
 			else:
+				system("clear")
 				self.inventory[select_item].roll_mod()
 				self.inventory[select_item].stats()
 				color_print(Fore.GREEN, "Mod re-rolled")
 		elif inventory_action == 2:
+			system("clear")
 			self.equip_item(self.inventory[select_item])
 		elif inventory_action == 3:
+			system("clear")
 			self.inventory[select_item].stats()
-		system("clear")
 
 	# check if an item is equipped before adding/removing stats
 	def equip_item(self, item):

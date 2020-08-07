@@ -3,7 +3,7 @@ from os import system
 from math import ceil, log
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
-from colorama import Fore, Style
+from colorama import Fore
 
 tier_limits = {
     "gargantuan_monsters": [50, 10, 10, 800, 1000],
@@ -36,6 +36,11 @@ implicits_list = list(implicits.keys())
 attacks_list = list(attacks.keys())
 equips_list = list(equips.keys())
 
+# pass arguments to print multiple strings in a certain color
+def color_print(color, *args):
+    for string in args:
+        print(f"{color}{string}")
+    print(f"{Fore.RESET}")
 
 # handles all numeric inputs
 def input_handler(min_input, max_input, *strings):
@@ -52,18 +57,10 @@ def input_handler(min_input, max_input, *strings):
 				if confirm.lower() == "yes":
 					exit()
 			else:
+				print("\n")
 				return choice
 		except ValueError:
 			color_print(Fore.RED, "Enter a number!")
-
-
-# pass arguments to print multiple strings in a certain color
-def color_print(color, *args):
-    print(f"{color}")
-    for string in args:
-        print(string)
-    print(f"{Style.RESET_ALL}")
-
 
 def loot():
     if random.choice([True, False]):
@@ -243,7 +240,7 @@ class Character:
 			else:
 				self.inventory[select_item].roll_mod()
 				self.inventory[select_item].stats()
-				color_print(Fore.GREEN, "Mod re-rolled\n")
+				color_print(Fore.GREEN, "Mod re-rolled")
 		elif inventory_action == 2:
 			self.equip_item(self.inventory[select_item])
 		elif inventory_action == 3:
@@ -253,10 +250,10 @@ class Character:
 	def equip_item(self, item):
 		if item.isEquipped:
 			multiplier = -1
-			print(f"You have unequipped {item.name}")
+			print(f"You have unequipped {item.name}\n")
 		else:
 			multiplier = 1
-			print(f"You have equipped {item.name}")
+			print(f"You have equipped {item.name}\n")
 		self.health[0] += item.health * multiplier
 		self.health[1] += item.health * multiplier
 		self.mana[0] += item.mana * multiplier

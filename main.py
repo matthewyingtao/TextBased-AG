@@ -1,6 +1,6 @@
 import random
 from os import system
-import math
+import math as math
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
@@ -84,10 +84,7 @@ def damage_calc(attacker, move, defender):
             damage *= 2
             color_print(Fore.GREEN, "Critical Hit!")
         # calculate damage
-        try:
-            defender.health[0] -= damage
-        except:
-            defender.health -= damage
+        defender.health[0] -= damage
         print(
             f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
         )
@@ -116,12 +113,12 @@ def attack_check():
 # battle function for when you fight a monster
 def battle(combat_monster):
     print(f"You are fighting a {combat_monster.name}")
-    while combat_monster.health > 0 and player.health[0] > 0:
+    while combat_monster.health[0] > 0 and player.health[0] > 0:
         combat_monster.stats()
         damage_calc(player, attacks_list[attack_check()], combat_monster)
-        if combat_monster.health > 0:
+        if combat_monster.health[0] > 0:
             damage_calc(combat_monster, attacks_list[0], player)
-    if combat_monster.health < 0:
+    if combat_monster.health[0] < 0:
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
@@ -139,8 +136,8 @@ def get_base_stats(item_type):
 
 def print_stats(**stats):
     stats_list = []
-    for name, value in stats.items():
-        stats_list.append(f"{name}: {value}")
+    for attribute, value in stats.items():
+        stats_list.append(f"{attribute}: {value}")
     color_print(Fore.GREEN, "STATS:", *stats_list)
 
 
@@ -280,7 +277,7 @@ class Character:
 class Monster:
     def __init__(self, tier_list, tier):
         self.name = random.choice(list(tier_list))
-        self.health = tier_limits.get(tier)[0]
+        self.health = [tier_limits.get(tier)[0], tier_limits.get(tier)[0]]
         self.attack = tier_limits.get(tier)[1]
         self.defence = tier_limits.get(tier)[2]
         self.xp = random.randint(tier_limits.get(tier)[3], tier_limits.get(tier)[4])
@@ -293,7 +290,7 @@ name = input("what is your name? \n")
 system("clear")
 
 player = Character(name)
-player.inventory.append(Equipment("Bronze", "Sword"))
+player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
 
 while True:

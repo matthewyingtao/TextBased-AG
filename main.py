@@ -47,7 +47,10 @@ def input_handler(min_input, max_input, *strings):
 			if choice < min_input or choice > max_input:
 				color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
 			elif choice == 0:
-				exit()
+				confirm = input("Are you sure?\n"
+				"-Yes- Quit\n")
+				if confirm.lower() == "yes":
+					exit()
 			else:
 				return choice
 		except ValueError:
@@ -288,7 +291,6 @@ class Monster:
 
 name = input("what is your name? \n")
 system("clear")
-color_print(Fore.RED, "Warning! Inputting 0 will exit game")
 
 player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))
@@ -320,11 +322,11 @@ while True:
         elif choice == 3:
             player.show_inventory()
 
-    choice = input_handler(
+    restart = input_handler(
         0, 2, "Game Over\n"
               "-1- restart\n"
               "-2- exit\n")
-    if choice == 1:
+    if restart == 1:
         player = Character(name)
-    elif choice == 2:
+    elif restart == 2:
         exit()

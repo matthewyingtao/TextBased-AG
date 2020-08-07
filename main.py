@@ -36,31 +36,34 @@ implicits_list = list(implicits.keys())
 attacks_list = list(attacks.keys())
 equips_list = list(equips.keys())
 
+
 # pass arguments to print multiple strings in a certain color
 def color_print(color, *args):
     for string in args:
         print(f"{color}{string}")
     print(f"{Fore.RESET}")
 
+
 # handles all numeric inputs
 def input_handler(min_input, max_input, *strings):
-	for string in strings:
-		print(string)
-	while True:
-		try:
-			choice = int(input(f"Input ({min_input}-{max_input}): "))
-			if choice < min_input or choice > max_input:
-				color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
-			elif choice == 0:
-				confirm = input("Are you sure?\n"
-				"-Yes- Quit\n")
-				if confirm.lower() == "yes":
-					exit()
-			else:
-				print()
-				return choice
-		except ValueError:
-			color_print(Fore.RED, "Enter a number!")
+    for string in strings:
+        print(string)
+    while True:
+        try:
+            choice = int(input(f"Input ({min_input}-{max_input}): "))
+            if choice < min_input or choice > max_input:
+                color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
+            elif choice == 0:
+                confirm = input("Are you sure?\n"
+                                "-Yes- Quit\n")
+                if confirm.lower() == "yes":
+                    exit()
+            else:
+                print()
+                return choice
+        except ValueError:
+            color_print(Fore.RED, "Enter a number!")
+
 
 def loot():
     if random.choice([True, False]):
@@ -86,42 +89,42 @@ def damage_calc(attacker, move, defender):
         # calculate damage
         defender.health[0] -= damage
         color_print(Fore.RED, f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
-        )
+                    )
     else:
         print("Miss!")
 
 
 # check if the attack selection exists or can be used
 def attack_check():
-	for index, action in enumerate(attacks.keys()):
-		print(f"-{index + 1}- {action}")
-	print()
-	while True:
-		selection = input_handler(0, (len(attacks))) - 1
-		# check if player has enough mana to use
-		if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
-			color_print(Fore.RED, "not enough mana!")
-		else:
-			break
-	player.mana[0] -= attacks.get(attacks_list[selection])[3]
-	return selection
+    for index, action in enumerate(attacks.keys()):
+        print(f"-{index + 1}- {action}")
+    print()
+    while True:
+        selection = input_handler(0, (len(attacks))) - 1
+        # check if player has enough mana to use
+        if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
+            color_print(Fore.RED, "not enough mana!")
+        else:
+            break
+    player.mana[0] -= attacks.get(attacks_list[selection])[3]
+    return selection
 
 
 # battle function for when you fight a monster
 def battle(combat_monster):
-	while combat_monster.health[0] > 0 and player.health[0] > 0:
-		combat_monster.stats()
-		damage_calc(player, attacks_list[attack_check()], combat_monster)
-		if combat_monster.health[0] > 0:
-			damage_calc(combat_monster, attacks_list[0], player)
-	if combat_monster.health[0] < 0:
-		system("clear")
-		color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
-		player.xp[0] += combat_monster.xp
-		player.xp_check()
-		loot()
-	elif player.health[0] < 0:
-		color_print(Fore.RED, f"{combat_monster.name} has defeated you")
+    while combat_monster.health[0] > 0 and player.health[0] > 0:
+        combat_monster.stats()
+        damage_calc(player, attacks_list[attack_check()], combat_monster)
+        if combat_monster.health[0] > 0:
+            damage_calc(combat_monster, attacks_list[0], player)
+    if combat_monster.health[0] < 0:
+        system("clear")
+        color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
+        player.xp[0] += combat_monster.xp
+        player.xp_check()
+        loot()
+    elif player.health[0] < 0:
+        color_print(Fore.RED, f"{combat_monster.name} has defeated you")
 
 
 def get_base_stats(item_type):
@@ -139,141 +142,141 @@ def print_stats(**stats):
 
 
 class Equipment:
-	def __init__(self, material, equip_type):
-		self.name = material + " " + equip_type
-		self.type = equip_type
-		base_stats = [ceil(materials.get(material) * stat) for stat in (get_base_stats(equip_type))]
-		self.health = base_stats[0]
-		self.mana = base_stats[1]
-		self.attack = base_stats[2]
-		self.defence = base_stats[3]
-		self.mod = None
-		self.mod_effect = [0, 0, 0, 0]
-		self.isEquipped = False
+    def __init__(self, material, equip_type):
+        self.name = material + " " + equip_type
+        self.type = equip_type
+        base_stats = [ceil(materials.get(material) * stat) for stat in (get_base_stats(equip_type))]
+        self.health = base_stats[0]
+        self.mana = base_stats[1]
+        self.attack = base_stats[2]
+        self.defence = base_stats[3]
+        self.mod = None
+        self.mod_effect = [0, 0, 0, 0]
+        self.isEquipped = False
 
-	# Apply mod changes in stats
-	def change_stats(self, operation):
-		change = [(operation * effect) for effect in self.mod_effect]
-		self.health += change[0]
-		self.mana += change[1]
-		self.attack += change[2]
-		self.defence += change[3]
+    # Apply mod changes in stats
+    def change_stats(self, operation):
+        change = [(operation * effect) for effect in self.mod_effect]
+        self.health += change[0]
+        self.mana += change[1]
+        self.attack += change[2]
+        self.defence += change[3]
 
-	# remove mod from an item's stats
-	def remove_mod(self):
-		if self.mod:
-			self.name = self.name[len(self.mod) + 1:]
-		self.change_stats(-1)
-		self.mod = None
-		self.mod_effect = [0, 0, 0, 0]
+    # remove mod from an item's stats
+    def remove_mod(self):
+        if self.mod:
+            self.name = self.name[len(self.mod) + 1:]
+        self.change_stats(-1)
+        self.mod = None
+        self.mod_effect = [0, 0, 0, 0]
 
-	# roll new mod on item
-	def roll_mod(self):
-		self.remove_mod()
-		self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
-		self.mod_effect = implicits.get(self.mod)
-		self.name = f"{self.mod} {self.name}"
-		self.change_stats(1)
+    # roll new mod on item
+    def roll_mod(self):
+        self.remove_mod()
+        self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
+        self.mod_effect = implicits.get(self.mod)
+        self.name = f"{self.mod} {self.name}"
+        self.change_stats(1)
 
-	def stats(self):
-		print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
-					Defence=self.defence, Mod=self.mod_effect, Equipped=self.isEquipped)
+    def stats(self):
+        print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
+                    Defence=self.defence, Mod=self.mod_effect, Equipped=self.isEquipped)
 
 
 class Character:
-	def __init__(self, player_name):
-		self.name = player_name
-		self.health = [10, 10]
-		self.mana = [5, 5]
-		self.attack = 3
-		self.defence = 0
-		self.xp = [0, 50]
-		self.level = 1
-		self.inventory = []
-		self.equipment = []
+    def __init__(self, player_name):
+        self.name = player_name
+        self.health = [10, 10]
+        self.mana = [5, 5]
+        self.attack = 3
+        self.defence = 0
+        self.xp = [0, 50]
+        self.level = 1
+        self.inventory = []
+        self.equipment = []
 
-	def stats(self):
-		print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
-					Defence=self.defence, XP=self.xp, Level=self.level)
+    def stats(self):
+        print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
+                    Defence=self.defence, XP=self.xp, Level=self.level)
 
-	# allocation of stat points
-	def level_up(self):
-		points = 3
-		while points > 0:
-			allocate = input_handler(
-				0, 4, "Allocate points:\n"
-						"-1- HEALTH\n"
-						"-2- MANA\n"
-						"-3- ATTACK\n"
-						"-4- DEFENCE\n")
-			if allocate == 1:
-				self.health[1] += 1
-			elif allocate == 2:
-				self.mana[1] += 1
-			elif allocate == 3:
-				self.attack += 1
-			elif allocate == 4:
-				self.defence += 1
-			points -= 1
+    # allocation of stat points
+    def level_up(self):
+        points = 3
+        while points > 0:
+            allocate = input_handler(
+                0, 4, "Allocate points:\n"
+                      "-1- HEALTH\n"
+                      "-2- MANA\n"
+                      "-3- ATTACK\n"
+                      "-4- DEFENCE\n")
+            if allocate == 1:
+                self.health[1] += 1
+            elif allocate == 2:
+                self.mana[1] += 1
+            elif allocate == 3:
+                self.attack += 1
+            elif allocate == 4:
+                self.defence += 1
+            points -= 1
 
-	# check xp after battle, and increases the xp requirement for the next level
-	def xp_check(self):
-		if self.xp[0] > self.xp[1]:
-			self.level += 1
-			self.xp[0] -= self.xp[1]
-			# XP to next level follows a logarithmic curve base 10 multiplier.
-			self.xp[1] = round((log(self.level, 10) + 1) * self.xp[1], 0)
-			color_print(Fore.GREEN, "You've leveled up!")
-			self.level_up()
+    # check xp after battle, and increases the xp requirement for the next level
+    def xp_check(self):
+        if self.xp[0] > self.xp[1]:
+            self.level += 1
+            self.xp[0] -= self.xp[1]
+            # XP to next level follows a logarithmic curve base 10 multiplier.
+            self.xp[1] = round((log(self.level, 10) + 1) * self.xp[1], 0)
+            color_print(Fore.GREEN, "You've leveled up!")
+            self.level_up()
 
-	def show_inventory(self):
-		print("INVENTORY:")
-		# make list of names from inventory items before printing
-		for item in self.inventory:
-			print(f"({self.inventory.index(item) + 1}) {item.name}")
-		print()
-		inventory_action = input_handler(
-			0, 3, "What would you like to do? \n"
-					"-1- Re-roll modifier\n"
-					"-2- Equip item\n"
-					"-3- Inspect item\n"
-		)
-		select_item = input_handler(0, len(self.inventory), "Which item?") - 1
-		if inventory_action == 1:
-			if self.inventory[select_item].isEquipped:
-				color_print(Fore.RED, "Can't re-roll while equipped")
-			else:
-				system("clear")
-				self.inventory[select_item].roll_mod()
-				self.inventory[select_item].stats()
-				color_print(Fore.GREEN, "Mod re-rolled")
-		elif inventory_action == 2:
-			system("clear")
-			self.equip_item(self.inventory[select_item])
-		elif inventory_action == 3:
-			system("clear")
-			self.inventory[select_item].stats()
+    def show_inventory(self):
+        print("INVENTORY:")
+        # make list of names from inventory items before printing
+        for item in self.inventory:
+            print(f"({self.inventory.index(item) + 1}) {item.name}")
+        print()
+        inventory_action = input_handler(
+            0, 3, "What would you like to do? \n"
+                  "-1- Re-roll modifier\n"
+                  "-2- Equip item\n"
+                  "-3- Inspect item\n"
+        )
+        select_item = input_handler(0, len(self.inventory), "Which item?") - 1
+        if inventory_action == 1:
+            if self.inventory[select_item].isEquipped:
+                color_print(Fore.RED, "Can't re-roll while equipped")
+            else:
+                system("clear")
+                self.inventory[select_item].roll_mod()
+                self.inventory[select_item].stats()
+                color_print(Fore.GREEN, "Mod re-rolled")
+        elif inventory_action == 2:
+            system("clear")
+            self.equip_item(self.inventory[select_item])
+        elif inventory_action == 3:
+            system("clear")
+            self.inventory[select_item].stats()
 
-	# check if an item is equipped before adding/removing stats
-	def equip_item(self, item):
-		if item.isEquipped:
-			multiplier = -1
-			print(f"You have unequipped {item.name}\n")
-			self.equipment.remove(item.type)
-		elif not (item.type in self.equipment):
-			multiplier = 1
-			print(f"You have equipped {item.name}\n")
-			self.equipment.append(item.type)
-		else:
-			print("You already have an item of the same type equipped!\n")
-			multiplier = 0
-		self.health[0] += item.health * multiplier
-		self.health[1] += item.health * multiplier
-		self.mana[0] += item.mana * multiplier
-		self.mana[1] += item.mana * multiplier
-		self.attack += item.attack * multiplier
-		self.defence += item.defence * multiplier
-		item.isEquipped = not item.isEquipped
+    # check if an item is equipped before adding/removing stats
+    def equip_item(self, item):
+        if item.isEquipped:
+            multiplier = -1
+            print(f"You have unequipped {item.name}\n")
+            self.equipment.remove(item.type)
+        elif not (item.type in self.equipment):
+            multiplier = 1
+            print(f"You have equipped {item.name}\n")
+            self.equipment.append(item.type)
+        else:
+            print("You already have an item of the same type equipped!\n")
+            multiplier = 0
+        self.health[0] += item.health * multiplier
+        self.health[1] += item.health * multiplier
+        self.mana[0] += item.mana * multiplier
+        self.mana[1] += item.mana * multiplier
+        self.attack += item.attack * multiplier
+        self.defence += item.defence * multiplier
+        item.isEquipped = not item.isEquipped
 
 
 class Monster:
@@ -287,6 +290,7 @@ class Monster:
     def stats(self):
         print_stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
 
+
 name = input("What's your name? \n")
 system("clear")
 
@@ -295,41 +299,41 @@ player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
 
 while True:
-	while player.health[0] > 0:
-		choice = input_handler(
-			0, 3, "What would you like to do? \n"
-					"-1- Adventure \n"
-					"-2- Go to an inn \n"
-					"-3- View inventory\n"
-					"-4- Shop\n")
-		if choice == 1:
-			difficulty = input_handler(
-				0, 6, "Which dungeon?\n"
-						"-1- The Plains\n"
-						"-2- The Forest\n"
-						"-3- The Caves\n"
-						"-4- The Magic Forest\n"
-						"-5- The Bay\n"
-						"-6- Hell\n")
-			system("clear")
-			monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
-			battle(monster)
-			player.stats()
-		elif choice == 2:
-			player.health[0] = player.health[1]
-			player.mana[0] = player.mana[1]
-			player.stats()
-		elif choice == 3:
-			player.show_inventory()
-		elif choice == 4:
-			print("Not added yet!")
+    while player.health[0] > 0:
+        choice = input_handler(
+            0, 3, "What would you like to do? \n"
+                  "-1- Adventure \n"
+                  "-2- Go to an inn \n"
+                  "-3- View inventory\n"
+                  "-4- Shop\n")
+        if choice == 1:
+            difficulty = input_handler(
+                0, 6, "Which dungeon?\n"
+                      "-1- The Plains\n"
+                      "-2- The Forest\n"
+                      "-3- The Caves\n"
+                      "-4- The Magic Forest\n"
+                      "-5- The Bay\n"
+                      "-6- Hell\n")
+            system("clear")
+            monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
+            battle(monster)
+            player.stats()
+        elif choice == 2:
+            player.health[0] = player.health[1]
+            player.mana[0] = player.mana[1]
+            player.stats()
+        elif choice == 3:
+            player.show_inventory()
+        elif choice == 4:
+            print("Not added yet!")
 
-	restart = input_handler(
-		0, 2, "Game Over\n"
-				"-1- restart\n"
-				"-2- exit\n")
-	if restart == 1:
-		player = Character(name)
-		player.inventory.append(Equipment("Iron", "Sword"))
-	elif restart == 2:
-		exit()
+    restart = input_handler(
+        0, 2, "Game Over\n"
+              "-1- restart\n"
+              "-2- exit\n")
+    if restart == 1:
+        player = Character(name)
+        player.inventory.append(Equipment("Iron", "Sword"))
+    elif restart == 2:
+        exit()

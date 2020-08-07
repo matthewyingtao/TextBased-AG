@@ -1,6 +1,6 @@
 import random
 from os import system
-import math
+from math import ceil, log
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
@@ -43,7 +43,7 @@ def input_handler(min_input, max_input, *strings):
 		print(string)
 	while True:
 		try:
-			choice = int(input())
+			choice = int(input(f"Input ({min_input}-{max_input}): "))
 			if choice < min_input or choice > max_input:
 				color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
 			elif choice == 0:
@@ -146,10 +146,10 @@ class Equipment:
     def __init__(self, material, equip_type):
         self.name = material + " " + equip_type
         base_stats = get_base_stats(equip_type)
-        self.health = math.ceil(base_stats[0] * materials.get(material))
-        self.mana = math.ceil(base_stats[1] * materials.get(material))
-        self.attack = math.ceil(base_stats[2] * materials.get(material))
-        self.defence = math.ceil(base_stats[3] * materials.get(material))
+        self.health = ceil(base_stats[0] * materials.get(material))
+        self.mana = ceil(base_stats[1] * materials.get(material))
+        self.attack = ceil(base_stats[2] * materials.get(material))
+        self.defence = ceil(base_stats[3] * materials.get(material))
         self.mod = None
         self.mod_effect = [0, 0, 0, 0]
         self.isEquipped = False
@@ -222,7 +222,7 @@ class Character:
             self.level += 1
             self.xp[0] -= self.xp[1]
             # XP to next level follows a logarithmic curve base 10 multiplier.
-            self.xp[1] = round((math.log(self.level, 10) + 1) * self.xp[1], 0)
+            self.xp[1] = round((log(self.level, 10) + 1) * self.xp[1], 0)
             color_print(Fore.GREEN, "You've leveled up!")
             self.level_up()
 
@@ -286,9 +286,9 @@ class Monster:
     def stats(self):
         print_stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
 
-
 name = input("what is your name? \n")
 system("clear")
+color_print(Fore.RED, "Warning! Inputting 0 will exit game")
 
 player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))

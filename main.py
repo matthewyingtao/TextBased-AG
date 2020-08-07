@@ -1,6 +1,6 @@
 import random
 from os import system
-from math import ceil, log, prod
+from math import ceil, log
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore, Style
@@ -146,42 +146,44 @@ def print_stats(**stats):
 
 
 class Equipment:
-    def __init__(self, material, equip_type):
-        self.name = material + " " + equip_type
-        base_stats = [ceil(materials.get(material) * stat) for stat in (get_base_stats(equip_type))]
-        self.health = base_stats[0]
-        self.mana = base_stats[1]
-        self.attack = base_stats[2]
-        self.defence = base_stats[3]
-        self.mod = None
-        self.mod_effect = [0, 0, 0, 0]
-        self.isEquipped = False
+	def __init__(self, material, equip_type):
+		self.name = material + " " + equip_type
+		base_stats = [ceil(materials.get(material) * stat) for stat in (get_base_stats(equip_type))]
+		self.health = base_stats[0]
+		self.mana = base_stats[1]
+		self.attack = base_stats[2]
+		self.defence = base_stats[3]
+		self.mod = None
+		self.mod_effect = [0, 0, 0, 0]
+		self.isEquipped = False
 
-    # remove mod from an item's stats
-    def remove_mod(self):
-        if self.mod:
-            self.name = self.name[len(self.mod) + 1:]
-        self.health -= self.mod_effect[0]
-        self.mana -= self.mod_effect[1]
-        self.attack -= self.mod_effect[2]
-        self.defence -= self.mod_effect[3]
-        self.mod = None
-        self.mod_effect = [0, 0, 0, 0]
+	# Apply mod changes in stats
+	def change_stats(self, operation):
+		change = [(operation * effect) for effect in self.mod_effect]
+		self.health += change[0]
+		self.mana += change[1]
+		self.attack += change[2]
+		self.defence += change[3]
 
-    # roll new mod on item
-    def roll_mod(self):
-        self.remove_mod()
-        self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
-        self.mod_effect = implicits.get(self.mod)
-        self.name = f"{self.mod} {self.name}"
-        self.health += self.mod_effect[0]
-        self.mana += self.mod_effect[1]
-        self.attack += self.mod_effect[2]
-        self.defence += self.mod_effect[3]
+	# remove mod from an item's stats
+	def remove_mod(self):
+		if self.mod:
+			self.name = self.name[len(self.mod) + 1:]
+		self.change_stats(-1)
+		self.mod = None
+		self.mod_effect = [0, 0, 0, 0]
 
-    def stats(self):
-        print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
-                    Defence=self.defence, Mod=self.mod_effect, Equipped=self.isEquipped)
+	# roll new mod on item
+	def roll_mod(self):
+		self.remove_mod()
+		self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
+		self.mod_effect = implicits.get(self.mod)
+		self.name = f"{self.mod} {self.name}"
+		self.change_stats(1)
+
+	def stats(self):
+		print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
+					Defence=self.defence, Mod=self.mod_effect, Equipped=self.isEquipped)
 
 
 class Character:
@@ -235,7 +237,7 @@ class Character:
 		for item in self.inventory:
 			print(f"({self.inventory.index(item) + 1}) {item.name}")
 		inventory_action = input_handler(
-			0, 5, "What would you like to do? \n"
+			0, 3, "What would you like to do? \n"
 					"-1- Re-roll modifier\n"
 					"-2- Equip item\n"
 					"-3- Inspect item\n"

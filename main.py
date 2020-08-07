@@ -57,7 +57,7 @@ def input_handler(min_input, max_input, *strings):
 				if confirm.lower() == "yes":
 					exit()
 			else:
-				print("\n")
+				print()
 				return choice
 		except ValueError:
 			color_print(Fore.RED, "Enter a number!")

@@ -1,5 +1,5 @@
 import random
-from os import system
+import os
 from math import ceil, log
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
@@ -37,6 +37,11 @@ attacks_list = list(attacks.keys())
 equips_list = list(equips.keys())
 
 
+# clear screen
+def cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 # pass arguments to print multiple strings in a certain color
 def color_print(color, *args):
     for string in args:
@@ -50,17 +55,17 @@ def input_handler(min_input, max_input, *strings):
         print(string)
     while True:
         try:
-            choice = int(input(f"Input ({min_input}-{max_input}): "))
-            if choice < min_input or choice > max_input:
+            user_input = int(input(f"Input ({min_input}-{max_input}): "))
+            if user_input < min_input or user_input > max_input:
                 color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
-            elif choice == 0:
+            elif user_input == 0:
                 confirm = input("Are you sure?\n"
                                 "-Yes- Quit\n")
                 if confirm.lower() == "yes":
                     exit()
             else:
                 print()
-                return choice
+                return user_input
         except ValueError:
             color_print(Fore.RED, "Enter a number!")
 
@@ -118,7 +123,7 @@ def battle(combat_monster):
         if combat_monster.health[0] > 0:
             damage_calc(combat_monster, attacks_list[0], player)
     if combat_monster.health[0] < 0:
-        system("clear")
+        cls()
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
@@ -246,15 +251,15 @@ class Character:
             if self.inventory[select_item].isEquipped:
                 color_print(Fore.RED, "Can't re-roll while equipped")
             else:
-                system("clear")
+                cls()
                 self.inventory[select_item].roll_mod()
                 self.inventory[select_item].stats()
                 color_print(Fore.GREEN, "Mod re-rolled")
         elif inventory_action == 2:
-            system("clear")
+            cls()
             self.equip_item(self.inventory[select_item])
         elif inventory_action == 3:
-            system("clear")
+            cls()
             self.inventory[select_item].stats()
 
     # check if an item is equipped before adding/removing stats
@@ -292,7 +297,7 @@ class Monster:
 
 
 name = input("What's your name? \n")
-system("clear")
+cls()
 
 player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))
@@ -315,7 +320,7 @@ while True:
                       "-4- The Magic Forest\n"
                       "-5- The Bay\n"
                       "-6- Hell\n")
-            system("clear")
+            cls()
             monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
             battle(monster)
             player.stats()

@@ -27,7 +27,7 @@ attacks = {
 # list of equippable items
 equips = {"Sword": [0, 0, 1, 0], "Body Armour": [1, 0, 0, 1], "Helmet": [2, 0, 0, 1], "Ring": [0, 1, 1, 0]}
 
-materials = {"Iron": 1, "Bronze": 1.5}
+materials = {"Iron": 1, "Bronze": 1.5, "Silver": 2, "Gold": 2.5, "Platinum": 3, "Diamond": 4}
 
 # list of monster lists by difficulty
 monster_tiers = [tiny_monsters, small_monsters, medium_monsters, large_monsters, huge_monsters, gargantuan_monsters]
@@ -39,7 +39,7 @@ monster_tiers_names = ["tiny_monsters", "small_monsters", "medium_monsters", "la
 implicits_list = list(implicits.keys())
 attacks_list = list(attacks.keys())
 equips_list = list(equips.keys())
-
+materials_list = list(materials.keys())
 
 # clear screen
 def cls():
@@ -77,8 +77,9 @@ def input_handler(min_input, max_input, *strings):
 def loot():
     if random.choice([True, False]):
         item_type = random.choice(equips_list)
-        player.inventory.append(Equipment("Iron", item_type))
-        if random.randint(0, 100) > 70:
+        item_material = random.choices(materials_list, weights=(50, 30, 20, 10, 5, 1))[0]
+        player.inventory.append(Equipment(item_material, item_type))
+        if random.choices((True, False), weights=(3, 7)):
             player.inventory[-1].roll_mod()
         print(f"{player.inventory[-1].name} has dropped")
     else:
@@ -308,6 +309,10 @@ class Monster:
 name = input("What's your name? \n")
 cls()
 
+def training_board(self):
+    pass
+    
+
 player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
@@ -350,7 +355,26 @@ while True:
         elif choice == 3:
             player.show_inventory()
         elif choice == 4:
-            print("Not added yet!")
+            shop = input_handler(
+                0, 4, "What's your business?\n"
+                    "-1- Buy tems\n"
+                    "-2- Sell items\n"
+                    "-3- Train\n"
+                    "-4- Exit\n")
+            if shop == 1:
+                print("Not added yet!")
+            elif shop == 2:
+                print("Not added yet!")
+            elif shop == 3:
+                print("Not added yet!")
+#                train = input_handler(
+#                    training_board()
+#                    0, 4, "what is you choice of improvement\n"
+#                        "-1- Health:\n"
+#                        "-2- Mana:\n"
+#                        "-3- Attack:\n"
+#                        "-4- Defence:\n")
+            
         elif choice == 5:
             # open player save file and dump the current player object
             with open('player.obj', 'wb') as player_file:

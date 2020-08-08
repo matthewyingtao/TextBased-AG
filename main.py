@@ -1,6 +1,7 @@
 import os
 import random
 from math import ceil, log
+import pickle
 
 from colorama import Fore
 import emoji
@@ -275,6 +276,7 @@ class Character:
             multiplier = -1
             print(f"You have unequipped {item.name}\n")
             self.equipment.remove(item.type)
+        # check if an item of same type is equipped
         elif not (item.type in self.equipment):
             multiplier = 1
             print(f"You have equipped {item.name}\n")
@@ -314,11 +316,13 @@ player.stats()
 while True:
     while player.health[0] > 0:
         choice = input_handler(
-            0, 4, "What would you like to do? \n"
+            0, 6, "What would you like to do? \n"
                   "-1- Adventure \n"
                   f"-2- Go to an inn (Cost: {inn_cost} gold)\n"
                   "-3- View inventory\n"
-                  "-4- Shop\n")
+                  "-4- Shop\n"
+                  "-5- Save game\n"
+                  "-6- Load game\n")
         if choice == 1:
             difficulty = input_handler(
                 0, 7, "Which dungeon?\n",
@@ -348,7 +352,14 @@ while True:
             player.show_inventory()
         elif choice == 4:
             print("Not added yet!")
-
+        elif choice == 5:
+            with open('player.obj', 'wb') as player_file:
+                pickle.dump(player, player_file)
+            color_print(Fore.GREEN, "Game saved!")
+        elif choice == 6:
+            filehandler = open('player.obj', 'rb') 
+            player = pickle.load(filehandler)
+            color_print(Fore.GREEN, "Game loaded!")
     restart = input_handler(
         0, 2, "Game Over\n"
               "-1- restart\n"

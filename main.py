@@ -1,8 +1,8 @@
 import os
 import random
-import emoji
 from math import ceil, log
 
+import emoji
 from colorama import Fore
 
 from implicits import implicits
@@ -318,11 +318,11 @@ while True:
             difficulty = input_handler(
                 0, 6, "Which dungeon?\n",
                 emoji.emojize("-1- The Plains :bug:\n"
-                              "-2- The Forest :evergreen_tree:\n"
-                              "-3- The Caves :gem_stone:\n"
-                              "-4- The Magic Forest :crystal_ball:\n"
-                              "-5- The Bay :water_wave:\n"
-                              "-6- Hell :fire:\n"))
+                              "-2- The Forest :shamrock:\n"
+                              "-3- The Caves :evergreen_tree:\n"
+                              "-4- The Magic Forest :evergreen_tree:\n"
+                              "-5- The Bay :evergreen_tree:\n"
+                              "-6- Hell\n"))
             cls()
             monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
             battle(monster)

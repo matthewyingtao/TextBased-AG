@@ -91,6 +91,8 @@ def damage_calc(attacker, move, defender):
     miss = random.random()
     if miss < attacks.get(move)[1]:
         damage = (attacker.attack + attacks.get(move)[0]) - defender.defence
+        if damage < 1:
+            damage = 0
         # get random float between 0-1 and check for critical hit, doubles damage if true
         critical_hit = random.random()
         if critical_hit < attacks.get(move)[2]:

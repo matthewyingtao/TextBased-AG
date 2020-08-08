@@ -41,6 +41,7 @@ attacks_list = list(attacks.keys())
 equips_list = list(equips.keys())
 materials_list = list(materials.keys())
 
+
 # clear screen
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -122,6 +123,46 @@ def attack_check():
     return selection
 
 
+# chooses the difficulty of adventure
+def adventure():
+    difficulty = input_handler(
+        0, 7, "Which dungeon?\n",
+        emoji.emojize("-1- The Plains :bug:\n"
+                      "-2- The Forest :evergreen_tree:\n"
+                      "-3- The Caves :gem_stone:\n"
+                      "-4- The Magic Forest :crystal_ball:\n"
+                      "-5- The Bay :water_wave:\n"
+                      "-6- Hell :fire:\n"
+                      "-7- Cancel\n"))
+    if difficulty != 7:
+        cls()
+        return Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
+
+
+def shop():
+    shop_action = input_handler(
+        0, 4, "What's your business?\n"
+              "-1- Buy tems\n"
+              "-2- Sell items\n"
+              "-3- Train\n"
+              "-4- Exit\n")
+    if shop_action == 1:
+        print("Not added yet!")
+    elif shop_action == 2:
+        print("Not added yet!")
+    elif shop_action == 3:
+        print("Not added yet!")
+
+
+#                train = input_handler(
+#                    training_board()
+#                    0, 4, "what is you choice of improvement\n"
+#                        "-1- Health:\n"
+#                        "-2- Mana:\n"
+#                        "-3- Attack:\n"
+#                        "-4- Defence:\n")
+
+
 # battle function for when you fight a monster
 def battle(combat_monster):
     while combat_monster.health[0] > 0 and player.health[0] > 0:
@@ -146,12 +187,25 @@ def get_base_stats(item_type):
 
 
 # used to print the stats of an object
-
 def print_stats(**stats):
     stats_list = []
     for attribute, value in stats.items():
         stats_list.append(f"{attribute}: {value}")
     color_print(Fore.GREEN, "STATS:", *stats_list)
+
+
+def save_player():
+    # open player save file and dump the current player object
+    with open('player.obj', 'wb') as player_file:
+        pickle.dump(player, player_file)
+    color_print(Fore.GREEN, "Game saved!")
+
+
+def load_player():
+    # load player save file and set player to the loaded object
+    player_load = open('player.obj', 'rb')
+    color_print(Fore.GREEN, "Game loaded!")
+    return pickle.load(player_load)
 
 
 class Equipment:
@@ -311,9 +365,10 @@ class Monster:
 name = input("What's your name? \n")
 cls()
 
+
 def training_board(self):
     pass
-    
+
 
 player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))
@@ -330,21 +385,10 @@ while True:
                   "-5- Save game\n"
                   "-6- Load game\n")
         if choice == 1:
-            difficulty = input_handler(
-                0, 7, "Which dungeon?\n",
-                emoji.emojize("-1- The Plains :bug:\n"
-                              "-2- The Forest :evergreen_tree:\n"
-                              "-3- The Caves :gem_stone:\n"
-                              "-4- The Magic Forest :crystal_ball:\n"
-                              "-5- The Bay :water_wave:\n"
-                              "-6- Hell :fire:\n"
-                              "-7- Cancel\n"))
-            if difficulty != 7:
-                cls()
-                monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
-                battle(monster)
-                player.inn_cost = round(player.inn_cost / 1.5)
-                player.stats()
+            monster = adventure()
+            battle(monster)
+            player.inn_cost = round(player.inn_cost / 1.5)
+            player.stats()
         elif choice == 2:
             if player.gold > player.inn_cost:
                 player.gold -= player.inn_cost
@@ -357,36 +401,11 @@ while True:
         elif choice == 3:
             player.show_inventory()
         elif choice == 4:
-            shop = input_handler(
-                0, 4, "What's your business?\n"
-                    "-1- Buy tems\n"
-                    "-2- Sell items\n"
-                    "-3- Train\n"
-                    "-4- Exit\n")
-            if shop == 1:
-                print("Not added yet!")
-            elif shop == 2:
-                print("Not added yet!")
-            elif shop == 3:
-                print("Not added yet!")
-#                train = input_handler(
-#                    training_board()
-#                    0, 4, "what is you choice of improvement\n"
-#                        "-1- Health:\n"
-#                        "-2- Mana:\n"
-#                        "-3- Attack:\n"
-#                        "-4- Defence:\n")
-            
+            shop()
         elif choice == 5:
-            # open player save file and dump the current player object
-            with open('player.obj', 'wb') as player_file:
-                pickle.dump(player, player_file)
-            color_print(Fore.GREEN, "Game saved!")
+            save_player()
         elif choice == 6:
-            # load player save file and set player to the loaded object
-            player_load = open('player.obj', 'rb')
-            player = pickle.load(player_load)
-            color_print(Fore.GREEN, "Game loaded!")
+            player = load_player()
 
     restart = input_handler(
         0, 2, "Game Over\n"

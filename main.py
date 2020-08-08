@@ -80,10 +80,6 @@ def loot():
     else:
         print("No loot dropped")
 
-def coin():
-    pass
-
-
 def damage_calc(attacker, move, defender):
     # get random float between 0-1 and check for miss
     miss = random.random()
@@ -130,7 +126,7 @@ def battle(combat_monster):
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
-        coin()
+        player.coin += random.randint(25,50) #monster_tier x1.25
         loot()
     elif player.health[0] < 0:
         color_print(Fore.RED, f"{combat_monster.name} has defeated you")
@@ -201,12 +197,13 @@ class Character:
         self.defence = 0
         self.xp = [0, 50]
         self.level = 1
+        self.coin = 0
         self.inventory = []
         self.equipment = []
 
     def stats(self):
         print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
-                    Defence=self.defence, XP=self.xp, Level=self.level, Coin=self.coin)
+                    Defence=self.defence, XP=self.xp, Level=self.level, Coin=self.coin) #Coin=self.coin
 
     # allocation of stat points
     def level_up(self):

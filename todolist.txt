@@ -2,7 +2,7 @@ iTO DO LIST:
 	Add weighted rolls to loot function.
 	Add better loot for harder monsters.
 	make an item shop /"not sure if this is something we wanna do until we get some consumables"/
-    coin drops 
+    higher coin drops for harder monsters
     changing dungeon display to have emojis as a enterace and the number in the cave -> 
          ***         ***
          *1*         *2*

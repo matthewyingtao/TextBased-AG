@@ -9,8 +9,6 @@ import emoji
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
-inn_cost = 50
-
 tier_limits = {
     "gargantuan_monsters": [50, 10, 10, 800, 1000],
     "huge_monsters": [30, 9, 6, 400, 550],
@@ -207,6 +205,7 @@ class Character:
         self.gold = 0
         self.inventory = []
         self.equipment = []
+        self.inn_cost = 50
 
     def stats(self):
         print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
@@ -318,7 +317,7 @@ while True:
         choice = input_handler(
             0, 6, "What would you like to do? \n"
                   "-1- Adventure \n"
-                  f"-2- Go to an inn (Cost: {inn_cost} gold)\n"
+                  f"-2- Go to an inn (Cost: {player.inn_cost} gold)\n"
                   "-3- View inventory\n"
                   "-4- Shop\n"
                   "-5- Save game\n"
@@ -337,7 +336,7 @@ while True:
                 cls()
                 monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
                 battle(monster)
-                inn_cost = round(inn_cost / 1.5)
+                inn_cost = round(player.inn_cost / 1.5)
                 player.stats()
         elif choice == 2:
             if player.gold > inn_cost:

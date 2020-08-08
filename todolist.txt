@@ -1,17 +1,12 @@
-iTO DO LIST:
-	Add weighted rolls to loot function.
+TO DO LIST:
+	Add weighted rolls to loot function. 
 	Add better loot for harder monsters.
 	make an item shop /"not sure if this is something we wanna do until we get some consumables"/
-    higher coin drops for harder monsters
     make skill upgrades with money
-    add settings to change gameplay e.g stats interface 
-    changing dungeon display to have emojis as a enterace and the number in the cave -> 
-         ***         ***
-         *1*         *2*
-        Plains      Forest
     shop   
         having legendary shop items to buy with coins
         having tiers of items in the shop
 
 LONG TERM GOALS:
 	allow progress saving /"probrably not going to do this till the end, only need to save the player object + attributes"/
+    add settings to change gameplay e.g stats interface /"don't think this is realistically doable rn"/

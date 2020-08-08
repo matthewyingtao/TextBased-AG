@@ -312,27 +312,33 @@ player.stats()
 while True:
     while player.health[0] > 0:
         choice = input_handler(
-            0, 3, "What would you like to do? \n"
+            0, 4, "What would you like to do? \n"
                   "-1- Adventure \n"
-                  "-2- Go to an inn \n"
+                  "-2- Go to an inn (Cost: 50 gold)\n"
                   "-3- View inventory\n"
                   "-4- Shop\n")
         if choice == 1:
             difficulty = input_handler(
-                0, 6, "Which dungeon?\n",
+                0, 7, "Which dungeon?\n",
                 emoji.emojize("-1- The Plains :bug:\n"
                               "-2- The Forest :evergreen_tree:\n"
                               "-3- The Caves :gem_stone:\n"
                               "-4- The Magic Forest :crystal_ball:\n"
                               "-5- The Bay :water_wave:\n"
-                              "-6- Hell :fire:\n"))
-            cls()
-            monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
-            battle(monster)
-            player.stats()
+                              "-6- Hell :fire:\n"
+                              "-7- Cancel\n"))
+            if difficulty != 7:
+                cls()
+                monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
+                battle(monster)
+                player.stats()
         elif choice == 2:
-            player.health[0] = player.health[1]
-            player.mana[0] = player.mana[1]
+            if player.gold > 50:
+                player.gold -= 50
+                player.health[0] = player.health[1]
+                player.mana[0] = player.mana[1]
+            else:
+                print("Not enough gold!")
             player.stats()
         elif choice == 3:
             player.show_inventory()

@@ -203,7 +203,7 @@ class Character:
         self.defence = 0
         self.xp = [0, 50]
         self.level = 1
-        self.gold = 5000
+        self.gold = 0
         self.inventory = []
         self.equipment = []
 

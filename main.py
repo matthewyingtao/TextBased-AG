@@ -4,6 +4,7 @@ from math import ceil, log
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 from colorama import Fore
+import emoji
 
 tier_limits = {
     "gargantuan_monsters": [50, 10, 10, 800, 1000],
@@ -307,20 +308,29 @@ player.stats()
 while True:
     while player.health[0] > 0:
         choice = input_handler(
-            0, 3, "What would you like to do? \n"
+            0, 5, "What would you like to do? \n"
                   "-1- Adventure \n"
                   "-2- Go to an inn \n"
                   "-3- View inventory\n"
-                  "-4- Shop\n")
+                  "-4- Merchant\n"
+                  "-5- Settings\n")
         if choice == 1:
             difficulty = input_handler(
-                0, 6, "Which dungeon?\n"
-                      "-1- The Plains\n"
-                      "-2- The Forest\n"
-                      "-3- The Caves\n"
-                      "-4- The Magic Forest\n"
-                      "-5- The Bay\n"
-                      "-6- Hell\n")
+                0, 7, "Which dungeon?\n"
+                      "\n"
+                      #emoji.emojize(":bug:" ":shamrock:"   ":evergreen_tree:" ":evergreen_tree:" ":evergreen_tree:\n")
+                      " -1-       -2-        -3-\n"
+                      "Plains - Forest - Magic Forest\n"
+                      "\n"
+                      #emoji.emojize(":crab:"":palm_tree:" ":spiral_shell:" ":volcano:\n")
+                      "    -4-    -5-   -6-\n"
+                      "   Caves - Bay - Hell\n"
+                      "\n"
+                      "           -7-\n"
+                      "          Space\n")
+
+#possible emoji :mountain: :snow-capped_mountain: :camping: :national park: :desert island: :sun: :crescent_moon: :rainbow: :fire: :comet: :water_wave: :sparkles: :dollar_banknote: :label: :chart_increasing: :crossed_swords: :shield: :warning: :shopping_cart: :white_medium_square: :black_medium_square: :green_square: :clinking_beer_mugs: :beer_mug: :dizzy:
+
             cls()
             monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
             battle(monster)
@@ -332,6 +342,8 @@ while True:
         elif choice == 3:
             player.show_inventory()
         elif choice == 4:
+            print("Not added yet!")
+        elif choice == 5:
             print("Not added yet!")
 
     restart = input_handler(

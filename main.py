@@ -340,8 +340,15 @@ class Shop:
         self.defence = 3
         # emoji names :green_square:   :white_large_square:
 
-    def training_board():
-        pass
+    def training_board(self, **attributes):
+        for attribute, value in attributes.items():
+            training = value * emoji.emojize(":green_square:")
+            for i in range (10 - len(training)):
+                training += emoji.emojize(":white_large_square:")
+            print(f" {training}  - {attribute}")
+
+    def training_cost(self, attribute):
+        return(50 + (attribute * 80))
 
     def show_shop(self):
         shop_action = input_handler(
@@ -352,10 +359,10 @@ class Shop:
         elif shop_action == 2:
             print("Not added yet!")
         elif shop_action == 3:
-            self.training_board()
+            self.training_board(Health=self.health, Mana=self.mana, Attack=self.attack, Defence=self.defence)
             train = input_handler(
-                0, 4, "what is you choice of improvement\n",
-                    *show_options(f"Health: {self.health_cost()}\n", f"Mana: {self.mana_cost}\n",f"Attack: {self.attack_cost()}\n", f"defence: {self.defence_cost()}\n"))
+                0, 4, "What would you like to train in?\n",
+                    *show_options(f"Health (Cost:{self.training_cost(self.health)})", f"Mana (Cost:{self.training_cost(self.mana)})",f"Attack (Cost:{self.training_cost(self.attack)})", f"Defence (Cost:{self.training_cost(self.defence)})"))
             if train == 1:
                 pass
             elif train == 2:

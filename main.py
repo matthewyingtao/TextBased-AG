@@ -126,14 +126,14 @@ def battle(combat_monster):
         damage_calc(player, attacks_list[attack_check()], combat_monster)
         if combat_monster.health[0] > 0:
             damage_calc(combat_monster, attacks_list[0], player)
-    if combat_monster.health[0] < 0:
+    if combat_monster.health[0] < 1:
         cls()
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
         player.gold += round(tier_limits.get(monster.tier)[4] * random.uniform(0.8, 1.2))
         loot()
-    elif player.health[0] < 0:
+    elif player.health[0] < 1:
         color_print(Fore.RED, f"{combat_monster.name} has defeated you")
 
 
@@ -336,12 +336,12 @@ while True:
                 cls()
                 monster = Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
                 battle(monster)
-                inn_cost = round(player.inn_cost / 1.5)
+                player.inn_cost = round(player.inn_cost / 1.5)
                 player.stats()
         elif choice == 2:
-            if player.gold > inn_cost:
-                player.gold -= inn_cost
-                inn_cost = round(inn_cost * 1.5)
+            if player.gold > player.inn_cost:
+                player.gold -= player.inn_cost
+                player.inn_cost = round(player.inn_cost * 1.5)
                 player.health[0] = player.health[1]
                 player.mana[0] = player.mana[1]
             else:

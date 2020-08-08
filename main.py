@@ -353,13 +353,16 @@ while True:
         elif choice == 4:
             print("Not added yet!")
         elif choice == 5:
+            # open player save file and dump the current player object
             with open('player.obj', 'wb') as player_file:
                 pickle.dump(player, player_file)
             color_print(Fore.GREEN, "Game saved!")
         elif choice == 6:
-            filehandler = open('player.obj', 'rb') 
-            player = pickle.load(filehandler)
+            # load player save file and set player to the loaded object
+            player_load = open('player.obj', 'rb')
+            player = pickle.load(player_load)
             color_print(Fore.GREEN, "Game loaded!")
+
     restart = input_handler(
         0, 2, "Game Over\n"
               "-1- restart\n"

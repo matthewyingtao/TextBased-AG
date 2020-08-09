@@ -2,12 +2,11 @@ TO DO LIST:
 	Add weighted rolls to loot function. 
 	Add better loot for harder monsters.
     make skill upgrades with money
+    make a coin checking code 
 
     make an item shop /"not sure if this is something we wanna do until we get some consumables"/   
         having legendary shop items to buy with coins
         having tiers of items in the shop
-        def:    ##******* cost: 100 coin
-        attack: #********
 
 LONG TERM GOALS:
     add settings to change gameplay e.g stats interface /"don't think this is realistically doable rn"/ yeahhhhh!!!

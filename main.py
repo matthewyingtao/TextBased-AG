@@ -85,10 +85,9 @@ def show_options(*strings):
 
 def loot(difficulty):
     loot_weight = [(weight * ((index ** monster_tiers_names.index(difficulty) + 1))) for index, weight in enumerate(weights)]
-    print(loot_weight)
     if random.choice([True, False]):
         item_type = random.choice(equips_list)
-        item_material = random.choices(materials_list, weights=(50, 30, 20, 10, 5, 1))[0]
+        item_material = random.choices(materials_list, weights=(*loot_weight))[0]
         player.inventory.append(Equipment(item_material, item_type))
         if random.choices((True, False), weights=(3, 7)):
             player.inventory[-1].roll_mod()
@@ -384,32 +383,36 @@ class Shop:
         elif shop_action == 2:
             print("Not added yet!")
         elif shop_action == 3:
-            training_board(Health=self.health, Mana=self.mana, Attack=self.attack, Defence=self.defence)
-            train = input_handler(
-                0, 4, "What would you like to train in?\n",
-                *show_options(f"Health (Cost:{training_cost(self.health)})",
-                              f"Mana (Cost:{training_cost(self.mana)})",
-                              f"Attack (Cost:{training_cost(self.attack)})",
-                              f"Defence (Cost:{training_cost(self.defence)})"))
-            if train == 1:
-                if gold_check(self.health):
-                    player.gold -= training_cost(self.health)
-                    self.health += 1
-                    player.health[1] += 1
-            elif train == 2:
-                player.gold -= training_cost(self.mana)
-                self.mana += 1
-                player.mana[1] += 1
-            elif train == 3:
-                if gold_check(self.attack):
-                    player.gold -= training_cost(self.attack)
-                    self.attack += 1
-                    player.attack += 1
-            elif train == 4:
-                if gold_check(self.defence):
-                    player.gold -= training_cost(self.defence)
-                    self.defence += 1
-                    player.defence += 1
+            while True:
+                training_board(Health=self.health, Mana=self.mana, Attack=self.attack, Defence=self.defence)
+                train = input_handler(
+                    0, 5, "What would you like to train in?\n",
+                    *show_options(f"Health (Cost:{training_cost(self.health)})",
+                                f"Mana (Cost:{training_cost(self.mana)})",
+                                f"Attack (Cost:{training_cost(self.attack)})",
+                                f"Defence (Cost:{training_cost(self.defence)})",
+                                "Go back"))
+                if train == 1:
+                    if gold_check(self.health):
+                        player.gold -= training_cost(self.health)
+                        self.health += 1
+                        player.health[1] += 1
+                elif train == 2:
+                    player.gold -= training_cost(self.mana)
+                    self.mana += 1
+                    player.mana[1] += 1
+                elif train == 3:
+                    if gold_check(self.attack):
+                        player.gold -= training_cost(self.attack)
+                        self.attack += 1
+                        player.attack += 1
+                elif train == 4:
+                    if gold_check(self.defence):
+                        player.gold -= training_cost(self.defence)
+                        self.defence += 1
+                        player.defence += 1
+                elif train == 5:
+                    break
         elif shop_action == 3:
             potion_shop()
 

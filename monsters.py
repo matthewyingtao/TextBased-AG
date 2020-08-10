@@ -21,6 +21,7 @@ gargantuan_monsters = {
     "Ancient Green Dragon",
     "Ancient Black Dragon",
     "Neothelid"
+    "Joji"
 }
 
 huge_monsters = {

@@ -1,5 +1,4 @@
 import os
-from os.path import isfile, join
 import random
 from math import ceil, log
 import pickle
@@ -186,9 +185,9 @@ def save_player():
 
 def load_player():
     # load player save file and set player to the loaded object
-    onlyfiles = [f for f in os.listdir("saves") if isfile(join("saves", f))]
-    load = input_handler(0, len(onlyfiles), show_options(*onlyfiles)) - 1
-    player_load = open(f"saves/{onlyfiles[load]}", 'rb')
+    save_files = [file for file in os.listdir("saves")]
+    load = input_handler(0, len(save_files), *show_options(*save_files)) - 1
+    player_load = open(f"saves/{save_files[load]}", 'rb')
     color_print(Fore.GREEN, "Game loaded!")
     return pickle.load(player_load)
 

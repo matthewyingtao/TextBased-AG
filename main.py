@@ -34,6 +34,7 @@ monster_tiers = [tiny_monsters, small_monsters, medium_monsters, large_monsters,
 
 monster_tiers_names = ["tiny_monsters", "small_monsters", "medium_monsters", "large_monsters", "huge_monsters",
                        "gargantuan_monsters"]
+weights = [50, 30, 20, 10, 5, 1]
 
 # convert dictionaries to lists to use as keys
 implicits_list = list(implicits.keys())
@@ -65,8 +66,9 @@ def input_handler(min_input, max_input, *strings):
                 color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
             elif user_input == 0:
                 confirm = input("Are you sure?\n"
-                                "-Yes- Quit\n")
-                if confirm.lower() == "yes":
+                                "-1- Quit\n"
+                                "-any key- stay\n")
+                if confirm.lower() == "1":
                     exit()
             else:
                 print()
@@ -82,7 +84,9 @@ def show_options(*strings):
     return options
 
 
-def loot():
+def loot(difficulty):
+    loot_weight = [(weight * ((index ** monster_tiers_names.index(difficulty) + 1))) for index, weight in enumerate(weights)]
+    print(loot_weight)
     if random.choice([True, False]):
         item_type = random.choice(equips_list)
         item_material = random.choices(materials_list, weights=(50, 30, 20, 10, 5, 1))[0]
@@ -140,9 +144,8 @@ def adventure():
         cls()
         return Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
 
-    # battle function for when you fight a monster
 
-
+# battle function for when you fight a monster
 def battle(combat_monster):
     while combat_monster.health[0] > 0 and player.health[0] > 0:
         combat_monster.stats()
@@ -155,7 +158,7 @@ def battle(combat_monster):
         player.xp[0] += combat_monster.xp
         player.xp_check()
         player.gold += round(tier_limits.get(monster.tier)[4] * random.uniform(0.8, 1.2))
-        loot()
+        loot(combat_monster.tier)
     elif player.health[0] < 1:
         color_print(Fore.RED, f"{combat_monster.name} has defeated you")
 
@@ -359,6 +362,8 @@ def gold_check(training):
         print("You don't have enough gold!")
     return False
 
+def potion_shop():
+    pass
 
 class Shop:
     def __init__(self):
@@ -371,7 +376,7 @@ class Shop:
     def show_shop(self):
         shop_action = input_handler(
             0, 4, "What's your business?\n",
-            *show_options("Buy items", "Sell items", "Train", "Exit"))
+            *show_options("Buy items", "Sell items", "Train", "Potions", "Exit"))
         if shop_action == 1:
             print("Not added yet!")
         elif shop_action == 2:
@@ -403,6 +408,8 @@ class Shop:
                     player.gold -= training_cost(self.defence)
                     self.defence += 1
                     player.defence += 1
+        elif shop_action == 3:
+            potion_shop()
 
 
 name = input("What's your name? \n")

@@ -1,12 +1,16 @@
 TO DO LIST:
-	Add weighted rolls to loot function. 
+	Add weighted rolls to loot function. is this done? 
 	Add better loot for harder monsters.
-    make skill upgrades with money
-    make a coin checking code 
+    add consumables like potions. are we putting this in the shop
+    make a function that saves the training progress when the game is restarted.
+    checking system on save and load ("are you sure?").
+    make exiting easier to understand adding numbers to the options.
 
-    make an item shop /"not sure if this is something we wanna do until we get some consumables"/   
+    make an item shop  
         having legendary shop items to buy with coins
         having tiers of items in the shop
-
+        make skill upgrades with money
+        
 LONG TERM GOALS:
     add settings to change gameplay e.g stats interface /"don't think this is realistically doable rn"/ yeahhhhh!!!
+    maybe add sound effects? https://docs.repl.it/repls/audio https://repl.it/@AllAwesome497/py-audio-demo#main.py

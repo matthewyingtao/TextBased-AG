@@ -179,6 +179,7 @@ def save_player():
     save_name = input("Save name:")
     with open(f"saves/{save_name}.obj", 'wb') as player_file:
         pickle.dump(player, player_file)
+    cls()
     color_print(Fore.GREEN, "Game saved!")
 
 
@@ -187,6 +188,7 @@ def load_player():
     save_files = [file for file in os.listdir("saves")]
     load = input_handler(0, len(save_files), *show_options(*save_files)) - 1
     player_load = open(f"saves/{save_files[load]}", 'rb')
+    cls()
     color_print(Fore.GREEN, "Game loaded!")
     return pickle.load(player_load)
 
@@ -374,16 +376,8 @@ class Shop:
         self.defence = 0
         # emoji names :green_square:   :white_large_square:
 
-    def show_shop(self):
-        shop_action = input_handler(
-            0, 4, "What's your business?\n",
-            *show_options("Buy items", "Sell items", "Train", "Potions", "Exit"))
-        if shop_action == 1:
-            print("Not added yet!")
-        elif shop_action == 2:
-            print("Not added yet!")
-        elif shop_action == 3:
-            while True:
+    def training(self):
+        while True:
                 cls()
                 training_board(Health=self.health, Mana=self.mana, Attack=self.attack, Defence=self.defence)
                 train = input_handler(
@@ -415,7 +409,18 @@ class Shop:
                         player.defence += 1
                 elif train == 5:
                     break
+
+    def show_shop(self):
+        shop_action = input_handler(
+            0, 4, "What's your business?\n",
+            *show_options("Buy items", "Sell items", "Train", "Potions", "Exit"))
+        if shop_action == 1:
+            print("Not added yet!")
+        elif shop_action == 2:
+            print("Not added yet!")
         elif shop_action == 3:
+            self.training()
+        elif shop_action == 4:
             potion_shop()
 
 
@@ -427,12 +432,6 @@ shop = Shop()
 player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
-
-for i in range(20):
-    loot("small_monsters")
-
-for i in range(20):
-    loot("gargantuan_monsters")
 
 while True:
     while player.health[0] > 0:

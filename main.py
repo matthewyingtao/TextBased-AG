@@ -436,9 +436,8 @@ player.stats()
 while True:
     while player.health[0] > 0:
         choice = input_handler(
-            0, 6, "What would you like to do? \n",
-            *show_options("Adventure", f"Go to an inn (Cost: {player.inn_cost} gold)", "View inventory", "Shop",
-                          "Save game", "Load game\n"))
+            0, 5, "What would you like to do? \n",
+            *show_options("Adventure", f"Go to an inn (Cost: {player.inn_cost} gold)", "View inventory", "Shop", "Save/Load game\n"))
         if choice == 1:
             monster = adventure()
             battle(monster)
@@ -458,9 +457,11 @@ while True:
         elif choice == 4:
             shop.show_shop()
         elif choice == 5:
-            save_player()
-        elif choice == 6:
-            player = load_player()
+            save_action = input_handler(0, 3, *show_options("Save game", "Load game", "Delete save"))
+            if save_action == 1:
+                save_player()
+            elif save_action == 2:
+                player = load_player()
 
     restart = input_handler(
         0, 2, "Game Over\n",

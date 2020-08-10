@@ -85,11 +85,11 @@ def show_options(*strings):
 
 def loot(difficulty):
     loot_weight = [(weight * ((index ** monster_tiers_names.index(difficulty) + 1))) for index, weight in enumerate(weights)]
-    if random.choice([True, False]):
+    if random.choice((True, False)):
         item_type = random.choice(equips_list)
-        item_material = random.choices(materials_list, weights=(*loot_weight))[0]
+        item_material = random.choices(materials_list, weights=(loot_weight))[0]
         player.inventory.append(Equipment(item_material, item_type))
-        if random.choices((True, False), weights=(3, 7)):
+        if random.choice((False, True)):
             player.inventory[-1].roll_mod()
         print(f"{player.inventory[-1].name} has dropped")
     else:
@@ -384,6 +384,7 @@ class Shop:
             print("Not added yet!")
         elif shop_action == 3:
             while True:
+                cls()
                 training_board(Health=self.health, Mana=self.mana, Attack=self.attack, Defence=self.defence)
                 train = input_handler(
                     0, 5, "What would you like to train in?\n",
@@ -398,9 +399,10 @@ class Shop:
                         self.health += 1
                         player.health[1] += 1
                 elif train == 2:
-                    player.gold -= training_cost(self.mana)
-                    self.mana += 1
-                    player.mana[1] += 1
+                    if gold_check(self.mana):
+                        player.gold -= training_cost(self.mana)
+                        self.mana += 1
+                        player.mana[1] += 1
                 elif train == 3:
                     if gold_check(self.attack):
                         player.gold -= training_cost(self.attack)
@@ -425,6 +427,12 @@ shop = Shop()
 player = Character(name)
 player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
+
+for i in range(20):
+    loot("small_monsters")
+
+for i in range(20):
+    loot("gargantuan_monsters")
 
 while True:
     while player.health[0] > 0:

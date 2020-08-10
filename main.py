@@ -1,4 +1,5 @@
 import os
+from os.path import isfile, join
 import random
 from math import ceil, log
 import pickle
@@ -41,7 +42,6 @@ implicits_list = list(implicits.keys())
 attacks_list = list(attacks.keys())
 equips_list = list(equips.keys())
 materials_list = list(materials.keys())
-
 
 # clear screen
 def cls():
@@ -178,14 +178,17 @@ def print_stats(**stats):
 
 def save_player():
     # open player save file and dump the current player object
-    with open('player.obj', 'wb') as player_file:
+    save_name = input("Save name:")
+    with open(f"saves/{save_name}.obj", 'wb') as player_file:
         pickle.dump(player, player_file)
     color_print(Fore.GREEN, "Game saved!")
 
 
 def load_player():
     # load player save file and set player to the loaded object
-    player_load = open('player.obj', 'rb')
+    onlyfiles = [f for f in os.listdir("saves") if isfile(join("saves", f))]
+    load = input_handler(0, len(onlyfiles), show_options(*onlyfiles)) - 1
+    player_load = open(f"saves/{onlyfiles[load]}", 'rb')
     color_print(Fore.GREEN, "Game loaded!")
     return pickle.load(player_load)
 

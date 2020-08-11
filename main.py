@@ -338,12 +338,16 @@ class Character:
         print("INVENTORY:")
         # make list of names from inventory items before printing
         for item in self.inventory:
-            print(f"({self.inventory.index(item) + 1}) {item.name}")
+            print(
+                f"({self.inventory.index(item) + 1}) {item.name}  ({Fore.LIGHTBLUE_EX}{item.health}, {item.mana}, {item.attack}, {item.defence}{Fore.RESET})"
+            )
         print()
         inventory_action = input_handler(
-            3, "What would you like to do? \n",
-            *show_options("Re-roll modifier", "Equip item", "Inspect item\n"))
-        select_item = input_handler(len(self.inventory), "Which item?") - 1
+            4, "What would you like to do? \n",
+            *show_options("Re-roll modifier", "Equip item", "Inspect item",
+                          "Cancel\n"))
+        if inventory_action != 4:
+            select_item = input_handler(len(self.inventory), "Which item?") - 1
         if inventory_action == 1:
             if self.inventory[select_item].isEquipped:
                 color_print(Fore.RED, "Can't re-roll while equipped")
@@ -447,8 +451,7 @@ class Shop:
                 Mana=self.mana,
                 Attack=self.attack,
                 Defence=self.defence)
-            train = input_handler(
-                5, "What would you like to train in?\n",
+            train = input_handler(5, "What would you like to train in?\n",
                 *show_options(f"Health (Cost:{training_cost(self.health)})",
                               f"Mana (Cost:{training_cost(self.mana)})",
                               f"Attack (Cost:{training_cost(self.attack)})",
@@ -479,7 +482,7 @@ class Shop:
 
     def show_shop(self):
         shop_action = input_handler(
-            4, "What's your business?\n",
+            5, "What's your business?\n",
             *show_options("Buy items", "Sell items", "Train", "Potions",
                           "Exit"))
         if shop_action == 1:
@@ -529,15 +532,15 @@ while True:
             shop.show_shop()
         elif choice == 5:
             save_action = input_handler(
-                4, *show_options("Save game", "Load game", "Delete save", "Cancel"))
+                4,
+                *show_options("Save game", "Load game", "Delete save",
+                              "Cancel"))
             if save_action == 1:
                 save_player()
             elif save_action == 2:
                 player = load_player()
             elif save_action == 3:
                 delete_save()
-            elif save_action == 4:
-                cls()
 
     restart = input_handler(2, "Game Over\n",
                             *show_options("restart", "exit\n"))

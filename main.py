@@ -222,6 +222,14 @@ def load_player():
     return pickle.load(player_load)
 
 
+def delete_save():
+    save_files = [file for file in os.listdir("saves")]
+    delete = input_handler(
+        len(save_files), "Which file would you like to delete?",
+        *show_options(*save_files)) - 1
+    os.remove(f"saves/{save_files[delete]}")
+
+
 class Equipment:
     def __init__(self, material, equip_type):
         self.name = material + " " + equip_type
@@ -521,11 +529,15 @@ while True:
             shop.show_shop()
         elif choice == 5:
             save_action = input_handler(
-                3, *show_options("Save game", "Load game", "Delete save"))
+                4, *show_options("Save game", "Load game", "Delete save", "Cancel"))
             if save_action == 1:
                 save_player()
             elif save_action == 2:
                 player = load_player()
+            elif save_action == 3:
+                delete_save()
+            elif save_action == 4:
+                cls()
 
     restart = input_handler(2, "Game Over\n",
                             *show_options("restart", "exit\n"))

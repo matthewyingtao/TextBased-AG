@@ -88,7 +88,7 @@ def input_handler(max_input, *strings):
                                 "-1- Quit\n"
                                 "-any key- cancel\n")
                 if confirm.lower() == "1":
-                    exit()
+                    raise SystemExit
             else:
                 print()
                 return user_input
@@ -560,4 +560,4 @@ while True:
     if restart == 1:
         player = Character(name)
     elif restart == 2:
-        exit()
+        raise SystemExit

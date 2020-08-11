@@ -9,7 +9,7 @@ from emoji import emojize
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
-tier_limits = {
+tier_attributes = {
     "gargantuan_monsters": [50, 10, 10, 800, 1000],
     "huge_monsters": [30, 9, 6, 400, 550],
     "large_monsters": [25, 8, 5, 180, 250],
@@ -55,18 +55,18 @@ def color_print(color, *args):
 
 
 # handles all numeric inputs
-def input_handler(min_input, max_input, *strings):
+def input_handler(max_input, *strings):
     for string in strings:
         print(string)
     while True:
         try:
-            user_input = int(input(f"Input ({min_input}-{max_input}): "))
-            if user_input < min_input or user_input > max_input:
-                color_print(Fore.RED, f"Input must be between {min_input} and {max_input}")
+            user_input = int(input(f"Input (0-{max_input}): "))
+            if user_input < 0 or user_input > max_input:
+                color_print(Fore.RED, f"Input must be between 0 and {max_input}")
             elif user_input == 0:
                 confirm = input("Are you sure?\n"
                                 "-1- Quit\n"
-                                "-any key- stay\n")
+                                "-any key- cancel\n")
                 if confirm.lower() == "1":
                     exit()
             else:
@@ -122,7 +122,7 @@ def attack_check():
         print(f"-{index + 1}- {action}")
     print()
     while True:
-        selection = input_handler(0, (len(attacks))) - 1
+        selection = input_handler((len(attacks))) - 1
         # check if player has enough mana to use
         if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
             color_print(Fore.RED, "not enough mana!")
@@ -134,8 +134,7 @@ def attack_check():
 
 # chooses the difficulty of adventure
 def adventure():
-    difficulty = input_handler(
-        0, 7, "Which dungeon?\n",
+    difficulty = input_handler(7, "Which dungeon?\n",
         *show_options("The Plains :bug:", "The Forest :evergreen_tree:", "The Caves :gem_stone:",
                       "The Magic Forest :crystal_ball:", "The Bay :water_wave:", "Hell :fire:", "Cancel"))
     if difficulty != 7:
@@ -155,7 +154,7 @@ def battle(combat_monster):
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
-        player.gold += round(tier_limits.get(monster.tier)[4] * random.uniform(0.8, 1.2))
+        player.gold += round(tier_attributes.get(monster.tier)[4] * random.uniform(0.8, 1.2))
         loot(combat_monster.tier)
     elif player.health[0] < 1:
         color_print(Fore.RED, f"{combat_monster.name} has defeated you")
@@ -186,7 +185,7 @@ def save_player():
 def load_player():
     # load player save file and set player to the loaded object
     save_files = [file for file in os.listdir("saves")]
-    load = input_handler(0, len(save_files), *show_options(*save_files)) - 1
+    load = input_handler(len(save_files), *show_options(*save_files)) - 1
     player_load = open(f"saves/{save_files[load]}", 'rb')
     cls()
     color_print(Fore.GREEN, "Game loaded!")
@@ -257,8 +256,7 @@ class Character:
     def level_up(self):
         points = 3
         while points > 0:
-            allocate = input_handler(
-                0, 4, "Allocate points:\n",
+            allocate = input_handler(4, "Allocate points:\n",
                 *show_options("HEALTH", "MANA", "ATTACK", "DEFENCE"))
             if allocate == 1:
                 self.health[1] += 1
@@ -287,10 +285,9 @@ class Character:
         for item in self.inventory:
             print(f"({self.inventory.index(item) + 1}) {item.name}")
         print()
-        inventory_action = input_handler(
-            0, 3, "What would you like to do? \n",
+        inventory_action = input_handler(3, "What would you like to do? \n",
             *show_options("Re-roll modifier", "Equip item", "Inspect item\n"))
-        select_item = input_handler(0, len(self.inventory), "Which item?") - 1
+        select_item = input_handler(len(self.inventory), "Which item?") - 1
         if inventory_action == 1:
             if self.inventory[select_item].isEquipped:
                 color_print(Fore.RED, "Can't re-roll while equipped")
@@ -333,10 +330,10 @@ class Monster:
     def __init__(self, tier_list, tier):
         self.name = random.choice(list(tier_list))
         self.tier = tier
-        self.health = [tier_limits.get(tier)[0], tier_limits.get(tier)[0]]
-        self.attack = tier_limits.get(tier)[1]
-        self.defence = tier_limits.get(tier)[2]
-        self.xp = round(tier_limits.get(tier)[3] * random.uniform(0.8, 1.2))
+        self.health = [tier_attributes.get(tier)[0], tier_attributes.get(tier)[0]]
+        self.attack = tier_attributes.get(tier)[1]
+        self.defence = tier_attributes.get(tier)[2]
+        self.xp = round(tier_attributes.get(tier)[3] * random.uniform(0.8, 1.2))
 
     def stats(self):
         print_stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
@@ -380,8 +377,7 @@ class Shop:
         while True:
                 cls()
                 training_board(Health=self.health, Mana=self.mana, Attack=self.attack, Defence=self.defence)
-                train = input_handler(
-                    0, 5, "What would you like to train in?\n",
+                train = input_handler(5, "What would you like to train in?\n",
                     *show_options(f"Health (Cost:{training_cost(self.health)})",
                                 f"Mana (Cost:{training_cost(self.mana)})",
                                 f"Attack (Cost:{training_cost(self.attack)})",
@@ -411,8 +407,7 @@ class Shop:
                     break
 
     def show_shop(self):
-        shop_action = input_handler(
-            0, 4, "What's your business?\n",
+        shop_action = input_handler(4, "What's your business?\n",
             *show_options("Buy items", "Sell items", "Train", "Potions", "Exit"))
         if shop_action == 1:
             print("Not added yet!")
@@ -435,8 +430,7 @@ player.stats()
 
 while True:
     while player.health[0] > 0:
-        choice = input_handler(
-            0, 5, "What would you like to do? \n",
+        choice = input_handler(5, "What would you like to do? \n",
             *show_options("Adventure", f"Go to an inn (Cost: {player.inn_cost} gold)", "View inventory", "Shop", "Save/Load game\n"))
         if choice == 1:
             monster = adventure()
@@ -458,14 +452,13 @@ while True:
         elif choice == 4:
             shop.show_shop()
         elif choice == 5:
-            save_action = input_handler(0, 3, *show_options("Save game", "Load game", "Delete save"))
+            save_action = input_handler(3, *show_options("Save game", "Load game", "Delete save"))
             if save_action == 1:
                 save_player()
             elif save_action == 2:
                 player = load_player()
 
-    restart = input_handler(
-        0, 2, "Game Over\n",
+    restart = input_handler(2, "Game Over\n",
         *show_options("restart", "exit\n"))
     if restart == 1:
         player = Character(name)

@@ -25,15 +25,32 @@ attacks = {
 }
 
 # list of equippable items
-equips = {"Sword": [0, 0, 1, 0], "Body Armour": [1, 0, 0, 1], "Helmet": [2, 0, 0, 1], "Ring": [0, 1, 1, 0]}
+equips = {
+    "Sword": [0, 0, 1, 0],
+    "Body Armour": [1, 0, 0, 1],
+    "Helmet": [2, 0, 0, 1],
+    "Ring": [0, 1, 1, 0]
+}
 
-materials = {"Iron": 1, "Bronze": 1.5, "Silver": 2, "Gold": 2.5, "Platinum": 3, "Diamond": 4}
+materials = {
+    "Iron": 1,
+    "Bronze": 1.5,
+    "Silver": 2,
+    "Gold": 2.5,
+    "Platinum": 3,
+    "Diamond": 4
+}
 
 # list of monster lists by difficulty
-monster_tiers = [tiny_monsters, small_monsters, medium_monsters, large_monsters, huge_monsters, gargantuan_monsters]
+monster_tiers = [
+    tiny_monsters, small_monsters, medium_monsters, large_monsters,
+    huge_monsters, gargantuan_monsters
+]
 
-monster_tiers_names = ["tiny_monsters", "small_monsters", "medium_monsters", "large_monsters", "huge_monsters",
-                       "gargantuan_monsters"]
+monster_tiers_names = [
+    "tiny_monsters", "small_monsters", "medium_monsters", "large_monsters",
+    "huge_monsters", "gargantuan_monsters"
+]
 weights = [50, 30, 20, 10, 5, 1]
 
 # convert dictionaries to lists to use as keys
@@ -41,6 +58,7 @@ implicits_list = list(implicits.keys())
 attacks_list = list(attacks.keys())
 equips_list = list(equips.keys())
 materials_list = list(materials.keys())
+
 
 # clear screen
 def cls():
@@ -62,7 +80,8 @@ def input_handler(max_input, *strings):
         try:
             user_input = int(input(f"Input (0-{max_input}): "))
             if user_input < 0 or user_input > max_input:
-                color_print(Fore.RED, f"Input must be between 0 and {max_input}")
+                color_print(Fore.RED,
+                            f"Input must be between 0 and {max_input}")
             elif user_input == 0:
                 confirm = input("Are you sure?\n"
                                 "-1- Quit\n"
@@ -84,10 +103,14 @@ def show_options(*strings):
 
 
 def loot(difficulty):
-    loot_weight = [(weight * ((index ** monster_tiers_names.index(difficulty) + 1))) for index, weight in enumerate(weights)]
+    loot_weight = [
+        (weight * ((index**monster_tiers_names.index(difficulty) + 1)))
+        for index, weight in enumerate(weights)
+    ]
     if random.choice((True, False)):
         item_type = random.choice(equips_list)
-        item_material = random.choices(materials_list, weights=(loot_weight))[0]
+        item_material = random.choices(
+            materials_list, weights=(loot_weight))[0]
         player.inventory.append(Equipment(item_material, item_type))
         if random.choice((False, True)):
             player.inventory[-1].roll_mod()
@@ -110,8 +133,10 @@ def damage_calc(attacker, move, defender):
             color_print(Fore.GREEN, "Critical Hit!")
         # calculate damage
         defender.health[0] -= damage
-        color_print(Fore.RED, f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
-                    )
+        color_print(
+            Fore.RED,
+            f"{attacker.name} used {move} and dealt {damage} damage to {defender.name}"
+        )
     else:
         print("Miss!")
 
@@ -134,12 +159,16 @@ def attack_check():
 
 # chooses the difficulty of adventure
 def adventure():
-    difficulty = input_handler(7, "Which dungeon?\n",
-        *show_options("The Plains :bug:", "The Forest :evergreen_tree:", "The Caves :gem_stone:",
-                      "The Magic Forest :crystal_ball:", "The Bay :water_wave:", "Hell :fire:", "Cancel"))
+    difficulty = input_handler(
+        7, "Which dungeon?\n",
+        *show_options("The Plains :bug:", "The Forest :evergreen_tree:",
+                      "The Caves :gem_stone:",
+                      "The Magic Forest :crystal_ball:",
+                      "The Bay :water_wave:", "Hell :fire:", "Cancel"))
     if difficulty != 7:
         cls()
-        return Monster(monster_tiers[difficulty - 1], monster_tiers_names[difficulty - 1])
+        return Monster(monster_tiers[difficulty - 1],
+                       monster_tiers_names[difficulty - 1])
 
 
 # battle function for when you fight a monster
@@ -154,7 +183,8 @@ def battle(combat_monster):
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
-        player.gold += round(tier_attributes.get(monster.tier)[4] * random.uniform(0.8, 1.2))
+        player.gold += round(
+            tier_attributes.get(monster.tier)[4] * random.uniform(0.8, 1.2))
         loot(combat_monster.tier)
     elif player.health[0] < 1:
         color_print(Fore.RED, f"{combat_monster.name} has defeated you")
@@ -196,7 +226,10 @@ class Equipment:
     def __init__(self, material, equip_type):
         self.name = material + " " + equip_type
         self.type = equip_type
-        base_stats = [ceil(materials.get(material) * stat) for stat in (get_base_stats(equip_type))]
+        base_stats = [
+            ceil(materials.get(material) * stat)
+            for stat in (get_base_stats(equip_type))
+        ]
         self.health = base_stats[0]
         self.mana = base_stats[1]
         self.attack = base_stats[2]
@@ -230,8 +263,14 @@ class Equipment:
         self.change_stats(1)
 
     def stats(self):
-        print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
-                    Defence=self.defence, Mod=self.mod_effect, Equipped=self.isEquipped)
+        print_stats(
+            Name=self.name,
+            Health=self.health,
+            Mana=self.mana,
+            Attack=self.attack,
+            Defence=self.defence,
+            Mod=self.mod_effect,
+            Equipped=self.isEquipped)
 
 
 class Character:
@@ -249,14 +288,22 @@ class Character:
         self.inn_cost = 50
 
     def stats(self):
-        print_stats(Name=self.name, Health=self.health, Mana=self.mana, Attack=self.attack,
-                    Defence=self.defence, XP=self.xp, Level=self.level, Gold=self.gold)
+        print_stats(
+            Name=self.name,
+            Health=self.health,
+            Mana=self.mana,
+            Attack=self.attack,
+            Defence=self.defence,
+            XP=self.xp,
+            Level=self.level,
+            Gold=self.gold)
 
     # allocation of stat points
     def level_up(self):
         points = 3
         while points > 0:
-            allocate = input_handler(4, "Allocate points:\n",
+            allocate = input_handler(
+                4, "Allocate points:\n",
                 *show_options("HEALTH", "MANA", "ATTACK", "DEFENCE"))
             if allocate == 1:
                 self.health[1] += 1
@@ -285,7 +332,8 @@ class Character:
         for item in self.inventory:
             print(f"({self.inventory.index(item) + 1}) {item.name}")
         print()
-        inventory_action = input_handler(3, "What would you like to do? \n",
+        inventory_action = input_handler(
+            3, "What would you like to do? \n",
             *show_options("Re-roll modifier", "Equip item", "Inspect item\n"))
         select_item = input_handler(len(self.inventory), "Which item?") - 1
         if inventory_action == 1:
@@ -330,13 +378,21 @@ class Monster:
     def __init__(self, tier_list, tier):
         self.name = random.choice(list(tier_list))
         self.tier = tier
-        self.health = [tier_attributes.get(tier)[0], tier_attributes.get(tier)[0]]
+        self.health = [
+            tier_attributes.get(tier)[0],
+            tier_attributes.get(tier)[0]
+        ]
         self.attack = tier_attributes.get(tier)[1]
         self.defence = tier_attributes.get(tier)[2]
-        self.xp = round(tier_attributes.get(tier)[3] * random.uniform(0.8, 1.2))
+        self.xp = round(
+            tier_attributes.get(tier)[3] * random.uniform(0.8, 1.2))
 
     def stats(self):
-        print_stats(Name=self.name, Health=self.health, Attack=self.attack, Defence=self.defence)
+        print_stats(
+            Name=self.name,
+            Health=self.health,
+            Attack=self.attack,
+            Defence=self.defence)
 
 
 def training_board(**attributes):
@@ -362,8 +418,10 @@ def gold_check(training):
         print("You don't have enough gold!")
     return False
 
+
 def potion_shop():
     pass
+
 
 class Shop:
     def __init__(self):
@@ -375,40 +433,47 @@ class Shop:
 
     def training(self):
         while True:
-                cls()
-                training_board(Health=self.health, Mana=self.mana, Attack=self.attack, Defence=self.defence)
-                train = input_handler(5, "What would you like to train in?\n",
-                    *show_options(f"Health (Cost:{training_cost(self.health)})",
-                                f"Mana (Cost:{training_cost(self.mana)})",
-                                f"Attack (Cost:{training_cost(self.attack)})",
-                                f"Defence (Cost:{training_cost(self.defence)})",
-                                "Go back"))
-                if train == 1:
-                    if gold_check(self.health):
-                        player.gold -= training_cost(self.health)
-                        self.health += 1
-                        player.health[1] += 1
-                elif train == 2:
-                    if gold_check(self.mana):
-                        player.gold -= training_cost(self.mana)
-                        self.mana += 1
-                        player.mana[1] += 1
-                elif train == 3:
-                    if gold_check(self.attack):
-                        player.gold -= training_cost(self.attack)
-                        self.attack += 1
-                        player.attack += 1
-                elif train == 4:
-                    if gold_check(self.defence):
-                        player.gold -= training_cost(self.defence)
-                        self.defence += 1
-                        player.defence += 1
-                elif train == 5:
-                    break
+            cls()
+            training_board(
+                Health=self.health,
+                Mana=self.mana,
+                Attack=self.attack,
+                Defence=self.defence)
+            train = input_handler(
+                5, "What would you like to train in?\n",
+                *show_options(f"Health (Cost:{training_cost(self.health)})",
+                              f"Mana (Cost:{training_cost(self.mana)})",
+                              f"Attack (Cost:{training_cost(self.attack)})",
+                              f"Defence (Cost:{training_cost(self.defence)})",
+                              "Go back"))
+            if train == 1:
+                if gold_check(self.health):
+                    player.gold -= training_cost(self.health)
+                    self.health += 1
+                    player.health[1] += 1
+            elif train == 2:
+                if gold_check(self.mana):
+                    player.gold -= training_cost(self.mana)
+                    self.mana += 1
+                    player.mana[1] += 1
+            elif train == 3:
+                if gold_check(self.attack):
+                    player.gold -= training_cost(self.attack)
+                    self.attack += 1
+                    player.attack += 1
+            elif train == 4:
+                if gold_check(self.defence):
+                    player.gold -= training_cost(self.defence)
+                    self.defence += 1
+                    player.defence += 1
+            elif train == 5:
+                break
 
     def show_shop(self):
-        shop_action = input_handler(4, "What's your business?\n",
-            *show_options("Buy items", "Sell items", "Train", "Potions", "Exit"))
+        shop_action = input_handler(
+            4, "What's your business?\n",
+            *show_options("Buy items", "Sell items", "Train", "Potions",
+                          "Exit"))
         if shop_action == 1:
             print("Not added yet!")
         elif shop_action == 2:
@@ -430,8 +495,11 @@ player.stats()
 
 while True:
     while player.health[0] > 0:
-        choice = input_handler(5, "What would you like to do? \n",
-            *show_options("Adventure", f"Go to an inn (Cost: {player.inn_cost} gold)", "View inventory", "Shop", "Save/Load game\n"))
+        choice = input_handler(
+            5, "What would you like to do? \n",
+            *show_options("Adventure",
+                          f"Go to an inn (Cost: {player.inn_cost} gold)",
+                          "View inventory", "Shop", "Save/Load game\n"))
         if choice == 1:
             monster = adventure()
             if monster:
@@ -452,14 +520,15 @@ while True:
         elif choice == 4:
             shop.show_shop()
         elif choice == 5:
-            save_action = input_handler(3, *show_options("Save game", "Load game", "Delete save"))
+            save_action = input_handler(
+                3, *show_options("Save game", "Load game", "Delete save"))
             if save_action == 1:
                 save_player()
             elif save_action == 2:
                 player = load_player()
 
     restart = input_handler(2, "Game Over\n",
-        *show_options("restart", "exit\n"))
+                            *show_options("restart", "exit\n"))
     if restart == 1:
         player = Character(name)
         player.inventory.append(Equipment("Iron", "Sword"))

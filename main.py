@@ -319,6 +319,7 @@ class Character:
         self.level = 1
         self.gold = 0
         self.inventory = []
+        self.inventory.append(Equipment("Iron", "Sword"))
         self.equipment = []
         self.inn_cost = 50
 
@@ -529,7 +530,6 @@ cls()
 shop = Shop()
 
 player = Character(name)
-player.inventory.append(Equipment("Iron", "Sword"))
 player.stats()
 
 while True:
@@ -559,6 +559,5 @@ while True:
                             *show_options("restart", "exit\n"))
     if restart == 1:
         player = Character(name)
-        player.inventory.append(Equipment("Iron", "Sword"))
     elif restart == 2:
         exit()

@@ -18,6 +18,7 @@ tier_attributes = {
     "tiny_monsters": [8, 0, 2, 20, 40]
 }
 
+#this is the stats of the attacks for when you are fighting monsters
 attacks = {
     "Slash": [3, 0.9, 0.1, 0],
     "Fireball": [4, 0.7, 0.25, 1],
@@ -228,6 +229,32 @@ def delete_save():
         len(save_files), "Which file would you like to delete?",
         *show_options(*save_files)) - 1
     os.remove(f"saves/{save_files[delete]}")
+
+
+def manage_saves():
+    save_action = input_handler(
+                    4,
+                    *show_options("Save game", "Load game", "Delete save",
+                                "Cancel"))
+    if save_action == 1:
+        save_player()
+        return False
+    elif save_action == 2:
+        return True
+    elif save_action == 3:
+        delete_save()
+        return False
+
+
+def inn():
+    if player.gold > player.inn_cost:
+        player.gold -= player.inn_cost
+        player.inn_cost = round(player.inn_cost * 1.5)
+        player.health[0] = player.health[1]
+        player.mana[0] = player.mana[1]
+    else:
+        print("Not enough gold!")
+    player.stats()
 
 
 class Equipment:
@@ -451,7 +478,8 @@ class Shop:
                 Mana=self.mana,
                 Attack=self.attack,
                 Defence=self.defence)
-            train = input_handler(5, "What would you like to train in?\n",
+            train = input_handler(
+                5, "What would you like to train in?\n",
                 *show_options(f"Health (Cost:{training_cost(self.health)})",
                               f"Mana (Cost:{training_cost(self.mana)})",
                               f"Attack (Cost:{training_cost(self.attack)})",
@@ -518,29 +546,14 @@ while True:
                 player.inn_cost = round(player.inn_cost / 1.5)
                 player.stats()
         elif choice == 2:
-            if player.gold > player.inn_cost:
-                player.gold -= player.inn_cost
-                player.inn_cost = round(player.inn_cost * 1.5)
-                player.health[0] = player.health[1]
-                player.mana[0] = player.mana[1]
-            else:
-                print("Not enough gold!")
-            player.stats()
+            inn()
         elif choice == 3:
             player.show_inventory()
         elif choice == 4:
             shop.show_shop()
         elif choice == 5:
-            save_action = input_handler(
-                4,
-                *show_options("Save game", "Load game", "Delete save",
-                              "Cancel"))
-            if save_action == 1:
-                save_player()
-            elif save_action == 2:
+            if manage_saves():
                 player = load_player()
-            elif save_action == 3:
-                delete_save()
 
     restart = input_handler(2, "Game Over\n",
                             *show_options("restart", "exit\n"))

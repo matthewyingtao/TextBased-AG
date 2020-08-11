@@ -4,7 +4,7 @@ from math import ceil, log
 import pickle
 
 from colorama import Fore
-import emoji
+from emoji import emojize
 
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
@@ -79,7 +79,7 @@ def input_handler(min_input, max_input, *strings):
 def show_options(*strings):
     options = []
     for index, string in enumerate(strings):
-        options.append(emoji.emojize(f"-{index + 1}- {string}"))
+        options.append(emojize(f"-{index + 1}- {string}"))
     return options
 
 
@@ -344,9 +344,9 @@ class Monster:
 
 def training_board(**attributes):
     for attribute, value in attributes.items():
-        training = value * emoji.emojize(":green_square:")
+        training = value * emojize(":green_square:")
         for i in range(10 - len(training)):
-            training += emoji.emojize(":white_large_square:")
+            training += emojize(":white_large_square:")
         print(f" {training}  - {attribute}")
 
 
@@ -440,9 +440,10 @@ while True:
             *show_options("Adventure", f"Go to an inn (Cost: {player.inn_cost} gold)", "View inventory", "Shop", "Save/Load game\n"))
         if choice == 1:
             monster = adventure()
-            battle(monster)
-            player.inn_cost = round(player.inn_cost / 1.5)
-            player.stats()
+            if monster:
+                battle(monster)
+                player.inn_cost = round(player.inn_cost / 1.5)
+                player.stats()
         elif choice == 2:
             if player.gold > player.inn_cost:
                 player.gold -= player.inn_cost

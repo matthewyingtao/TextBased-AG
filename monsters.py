@@ -20,7 +20,7 @@ gargantuan_monsters = {
     "Ancient Blue Dragon",
     "Ancient Green Dragon",
     "Ancient Black Dragon",
-    "Neothelid"
+    "Neothelid",
     "Joji"
 }
 

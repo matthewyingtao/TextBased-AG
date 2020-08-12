@@ -1,13 +1,12 @@
 TO DO LIST:
     add consumables like potions. /"adding more items to the store yeah"/
     make a function that saves the training progress when the game is restarted. /"probrably can do this by adding the object as an attribute of player"/
-    add stats to the inventory items so you don't have to inspect one at a time.
     remove the ".obj" at the end of all saves
-    make an item shop  
-        having legendary shop items to buy with coins
-        having tiers of items in the shop
-        make skill upgrades with money
-        
+
+    add legendary shop items to buy with coins
+    add tiers of items in the shop
+    add skill upgrades with money'
+
 LONG TERM GOALS:
     add settings to change gameplay e.g stats interface
     nerf defence and balance out the game a little

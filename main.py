@@ -1,6 +1,6 @@
 import os
 import random
-from math import ceil, log
+from math import ceil, log, sqrt
 import pickle
 
 from colorama import Fore
@@ -10,15 +10,15 @@ from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
 tier_attributes = {
-    "gargantuan_monsters": [50, 10, 10, 800, 1000],
-    "huge_monsters": [30, 9, 6, 400, 550],
-    "large_monsters": [25, 8, 5, 180, 250],
-    "medium_monsters": [18, 6, 4, 80, 120],
+    "gargantuan_monsters": [50, 40, 10, 800, 1000],
+    "huge_monsters": [30, 9, 25, 400, 550],
+    "large_monsters": [25, 15, 5, 180, 250],
+    "medium_monsters": [18, 10, 4, 80, 120],
     "small_monsters": [13, 3, 3, 40, 80],
     "tiny_monsters": [8, 0, 2, 20, 40]
 }
 
-#this is the stats of the attacks for when you are fighting monsters
+# this is the stats of the attacks for when you are fighting monsters
 attacks = {
     "Slash": [3, 0.9, 0.1, 0],
     "Fireball": [4, 0.7, 0.25, 1],
@@ -105,13 +105,13 @@ def show_options(*strings):
 
 def loot(difficulty):
     loot_weight = [
-        (weight * ((index**monster_tiers_names.index(difficulty) + 1)))
+        (weight * (index ** monster_tiers_names.index(difficulty) + 1))
         for index, weight in enumerate(weights)
     ]
     if random.choice((True, False)):
         item_type = random.choice(equips_list)
         item_material = random.choices(
-            materials_list, weights=(loot_weight))[0]
+            materials_list, weights=loot_weight)[0]
         player.inventory.append(Equipment(item_material, item_type))
         if random.choice((False, True)):
             player.inventory[-1].roll_mod()
@@ -123,8 +123,9 @@ def loot(difficulty):
 def damage_calc(attacker, move, defender):
     # get random float between 0-1 and check for miss
     miss = random.random()
+    attack = attacker.attack + attacks.get(move)[0]
     if miss < attacks.get(move)[1]:
-        damage = (attacker.attack + attacks.get(move)[0]) - defender.defence
+        damage = ceil(attack - (defender.defence / sqrt(attack)))
         if damage < 1:
             damage = 0
         # get random float between 0-1 and check for critical hit, doubles damage if true
@@ -233,9 +234,9 @@ def delete_save():
 
 def manage_saves():
     save_action = input_handler(
-                    4,
-                    *show_options("Save game", "Load game", "Delete save",
-                                "Cancel"))
+        4,
+        *show_options("Save game", "Load game", "Delete save",
+                      "Cancel"))
     if save_action == 1:
         save_player()
         return False

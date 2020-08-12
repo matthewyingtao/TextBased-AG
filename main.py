@@ -205,6 +205,7 @@ def print_stats(**stats):
 
 
 def save_player():
+    player.shop = shop
     # open player save file and dump the current player object
     save_name = input("Save name:")
     with open(f"saves/{save_name}.obj", 'wb') as player_file:
@@ -320,6 +321,7 @@ class Character:
         self.inventory.append(Equipment("Iron", "Sword"))
         self.equipment = []
         self.inn_cost = 50
+        self.shop = None
 
     def stats(self):
         print_stats(
@@ -555,6 +557,7 @@ while True:
         elif choice == 5:
             if manage_saves():
                 player = load_player()
+                shop = player.shop
 
     restart = input_handler(2, "Game Over\n",
                             *show_options("Restart", "Exit\n"))

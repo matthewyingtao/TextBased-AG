@@ -9,5 +9,5 @@ TO DO LIST:
 
 LONG TERM GOALS:
     add settings to change gameplay e.g stats interface
-    nerf defence and balance out the game a little
+    balance the game
     maybe add sound effects? https://docs.repl.it/repls/audio https://repl.it/@AllAwesome497/py-audio-demo#main.py

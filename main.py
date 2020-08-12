@@ -105,13 +105,12 @@ def show_options(*strings):
 
 def loot(difficulty):
     loot_weight = [
-        (weight * (index ** monster_tiers_names.index(difficulty) + 1))
+        (weight * (index**monster_tiers_names.index(difficulty) + 1))
         for index, weight in enumerate(weights)
     ]
     if random.choice((True, False)):
         item_type = random.choice(equips_list)
-        item_material = random.choices(
-            materials_list, weights=loot_weight)[0]
+        item_material = random.choices(materials_list, weights=loot_weight)[0]
         player.inventory.append(Equipment(item_material, item_type))
         if random.choice((False, True)):
             player.inventory[-1].roll_mod()
@@ -234,9 +233,7 @@ def delete_save():
 
 def manage_saves():
     save_action = input_handler(
-        4,
-        *show_options("Save game", "Load game", "Delete save",
-                      "Cancel"))
+        4, *show_options("Save game", "Load game", "Delete save", "Cancel"))
     if save_action == 1:
         save_player()
         return False

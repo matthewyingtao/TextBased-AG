@@ -10,19 +10,19 @@ from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
 tier_attributes = {
-    "gargantuan_monsters": [50, 40, 10, 800, 1000],
-    "huge_monsters": [30, 9, 25, 400, 550],
-    "large_monsters": [25, 15, 5, 180, 250],
-    "medium_monsters": [18, 10, 4, 80, 120],
-    "small_monsters": [13, 3, 3, 40, 80],
-    "tiny_monsters": [8, 0, 2, 20, 40]
+    "gargantuan_monsters": [50, 50, 10, 800, 1000],
+    "huge_monsters": [30, 9, 30, 400, 550],
+    "large_monsters": [25, 20, 5, 180, 250],
+    "medium_monsters": [18, 15, 4, 80, 120],
+    "small_monsters": [13, 8, 3, 40, 80],
+    "tiny_monsters": [8, 3, 2, 20, 40]
 }
 
-# this is the stats of the attacks for when you are fighting monsters
-attacks = {
-    "Slash": [3, 0.9, 0.1, 0],
-    "Fireball": [4, 0.7, 0.25, 1],
-    "Shock": [2, 1, 0.5, 1]
+# this is the stats of the abilities [bonus damage, hit chance, crit chance, mana cost]
+abilities = {
+    "Slash": [1, 0.9, 0.1, 0],
+    "Fireball": [1.5, 0.7, 0.25, 1],
+    "Shock": [0.8, 1, 0.5, 1]
 }
 
 # list of equippable items
@@ -56,7 +56,7 @@ weights = [50, 30, 20, 10, 5, 1]
 
 # convert dictionaries to lists to use as keys
 implicits_list = list(implicits.keys())
-attacks_list = list(attacks.keys())
+attacks_list = list(abilities.keys())
 equips_list = list(equips.keys())
 materials_list = list(materials.keys())
 
@@ -122,14 +122,14 @@ def loot(difficulty):
 def damage_calc(attacker, move, defender):
     # get random float between 0-1 and check for miss
     miss = random.random()
-    attack = attacker.attack + attacks.get(move)[0]
-    if miss < attacks.get(move)[1]:
+    attack = attacker.attack * abilities.get(move)[0]
+    if miss < abilities.get(move)[1]:
         damage = ceil(attack - (defender.defence / sqrt(attack)))
         if damage < 1:
             damage = 0
         # get random float between 0-1 and check for critical hit, doubles damage if true
         critical_hit = random.random()
-        if critical_hit < attacks.get(move)[2]:
+        if critical_hit < abilities.get(move)[2]:
             damage *= 2
             color_print(Fore.GREEN, "Critical Hit!")
         # calculate damage
@@ -144,17 +144,17 @@ def damage_calc(attacker, move, defender):
 
 # check if the attack selection exists or can be used
 def attack_check():
-    for index, action in enumerate(attacks.keys()):
+    for index, action in enumerate(abilities.keys()):
         print(f"-{index + 1}- {action}")
     print()
     while True:
-        selection = input_handler((len(attacks))) - 1
+        selection = input_handler((len(abilities))) - 1
         # check if player has enough mana to use
-        if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
+        if player.mana[0] - abilities.get(attacks_list[selection])[3] < 0:
             color_print(Fore.RED, "not enough mana!")
         else:
             break
-    player.mana[0] -= attacks.get(attacks_list[selection])[3]
+    player.mana[0] -= abilities.get(attacks_list[selection])[3]
     return selection
 
 

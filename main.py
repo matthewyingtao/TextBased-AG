@@ -441,12 +441,13 @@ def training_board(**attributes):
         print(f" {training}  - {attribute}")
 
 
-def training_cost(attribute):
-    return round(150 ** ((attribute / 10) + 1))
+def training_cost(base_cost, attribute):
+    return round(base_cost**((attribute / 10) + 1))
 
 
-def gold_check(training):
-    cost = training_cost(training)
+def gold_check(base_cost, training):
+    cost = training_cost(base_cost, training)
+    print(cost)
     if training > 9:
         print("Already max level!")
         return False
@@ -472,6 +473,7 @@ class Shop:
     def training(self):
         while True:
             cls()
+            color_print(Fore.YELLOW, f"Gold: {player.gold}")
             training_board(
                 Health=self.health,
                 Mana=self.mana,
@@ -479,29 +481,30 @@ class Shop:
                 Defence=self.defence)
             train = input_handler(
                 5, "What would you like to train in?\n",
-                *show_options(f"Health (Cost:{training_cost(self.health)})",
-                              f"Mana (Cost:{training_cost(self.mana)})",
-                              f"Attack (Cost:{training_cost(self.attack)})",
-                              f"Defence (Cost:{training_cost(self.defence)})",
-                              "Go back"))
+                *show_options(
+                    f"Health (Cost:{training_cost(150, self.health)})",
+                    f"Mana (Cost:{training_cost(50, self.mana)})",
+                    f"Attack (Cost:{training_cost(150, self.attack)})",
+                    f"Defence (Cost:{training_cost(150, self.defence)})",
+                    "Go back"))
             if train == 1:
-                if gold_check(self.health):
-                    player.gold -= training_cost(self.health)
+                if gold_check(150, self.health):
+                    player.gold -= training_cost(150, self.health)
                     self.health += 1
                     player.health[1] += 1
             elif train == 2:
-                if gold_check(self.mana):
-                    player.gold -= training_cost(self.mana)
+                if gold_check(50, self.mana):
+                    player.gold -= training_cost(50, self.mana)
                     self.mana += 1
                     player.mana[1] += 1
             elif train == 3:
-                if gold_check(self.attack):
-                    player.gold -= training_cost(self.attack)
+                if gold_check(150, self.attack):
+                    player.gold -= training_cost(150, self.attack)
                     self.attack += 1
                     player.attack += 1
             elif train == 4:
-                if gold_check(self.defence):
-                    player.gold -= training_cost(self.defence)
+                if gold_check(150, self.defence):
+                    player.gold -= training_cost(150, self.defence)
                     self.defence += 1
                     player.defence += 1
             elif train == 5:

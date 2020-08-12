@@ -18,7 +18,7 @@ tier_attributes = {
     "tiny_monsters": [8, 3, 2, 20, 40]
 }
 
-# this is the stats of the abilities [bonus damage, hit chance, crit chance, mana cost]
+# this is the stats of the abilities [damage multiplier, hit chance, crit chance, mana cost]
 abilities = {
     "Slash": [1, 0.9, 0.1, 0],
     "Fireball": [1.5, 0.7, 0.25, 1],
@@ -179,8 +179,7 @@ def battle(combat_monster):
         damage_calc(player, attacks_list[attack_check()], combat_monster)
         if combat_monster.health[0] > 0:
             damage_calc(combat_monster, attacks_list[0], player)
-    if combat_monster.health[0] < 1:
-        cls()
+    if combat_monster.health[0] <= 0:
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()

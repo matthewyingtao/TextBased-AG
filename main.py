@@ -497,6 +497,7 @@ class Shop:
             self.health, self.mana, self.attack, self.defence
         ]
         while True:
+            cls()
             color_print(Fore.YELLOW, f"Gold: {player.gold}")
             training_board(
                 Health=self.health[0],

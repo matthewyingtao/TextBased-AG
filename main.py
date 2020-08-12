@@ -208,7 +208,7 @@ def save_player():
     player.shop = shop
     # open player save file and dump the current player object
     save_name = input("Save name:")
-    with open(f"saves/{save_name}.obj", 'wb') as player_file:
+    with open(f"saves/{save_name}", 'wb') as player_file:
         pickle.dump(player, player_file)
     cls()
     color_print(Fore.GREEN, "Game saved!")
@@ -260,6 +260,7 @@ class Equipment:
     def __init__(self, material, equip_type):
         self.name = material + " " + equip_type
         self.type = equip_type
+        self.material = material
         base_stats = [
             ceil(materials.get(material) * stat)
             for stat in (get_base_stats(equip_type))
@@ -462,6 +463,16 @@ def gold_check(base_cost, training):
 
 def potion_shop():
     pass
+
+
+def price_equipment(equipment):
+    price = 50**((materials_list.index(equipment.material) / 10) + 1)
+    price = round(price * (equipment.attack + equipment.mana + equipment.attack
+                           + equipment.defence))
+    return price
+
+
+# price_equipment(self.inventory[select_item])
 
 
 class Shop:

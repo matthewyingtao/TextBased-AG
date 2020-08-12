@@ -1,13 +1,17 @@
 TO DO LIST:
-    add consumables like potions. /"adding more items to the store yeah"/
-    make a function that saves the training progress when the game is restarted. /"probrably can do this by adding the object as an attribute of player"/
-    remove the ".obj" at the end of all saves
-
-    add legendary shop items to buy with coins
-    add tiers of items in the shop
-    add skill upgrades with money'
+    Shop:
+        consumables like potions
+        legendary shop items to buy with coins
+        tiers of items in the shop
+        skill upgrades with money
+        evaluate sell/buy price of equipment
+    Combat:
+        ability to run away
+        more moves
+        battle cries / stat raisers
+        consumables in combat
 
 LONG TERM GOALS:
-    add settings to change gameplay e.g stats interface
+    settings to change gameplay e.g stats interface
     balance the game
-    maybe add sound effects? https://docs.repl.it/repls/audio https://repl.it/@AllAwesome497/py-audio-demo#main.py
+    sound effects? https://docs.repl.it/repls/audio https://repl.it/@AllAwesome497/py-audio-demo#main.py

@@ -442,7 +442,7 @@ def training_board(**attributes):
 
 
 def training_cost(attribute):
-    return 50 + (attribute * 80)
+    return round(150 ** ((attribute / 10) + 1))
 
 
 def gold_check(training):
@@ -554,8 +554,9 @@ while True:
                 player = load_player()
 
     restart = input_handler(2, "Game Over\n",
-                            *show_options("restart", "exit\n"))
+                            *show_options("Restart", "Exit\n"))
     if restart == 1:
         player = Character(name)
     elif restart == 2:
+        print("Thanks for playing!")
         raise SystemExit

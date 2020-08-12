@@ -413,6 +413,16 @@ class Character:
         self.defence += item.defence * multiplier
         item.isEquipped = not item.isEquipped
 
+    def train(self, attribute):
+        if attribute == 1:
+            self.health[1] += 1
+        elif attribute == 2:
+            self.mana[1] += 1
+        elif attribute == 3:
+            self.attack += 1
+        elif attribute == 4:
+            self.defence += 1
+
 
 class Monster:
     def __init__(self, tier_list, tier):
@@ -443,17 +453,17 @@ def training_board(**attributes):
         print(f" {training}  - {attribute}")
 
 
-def training_cost(base_cost, attribute):
-    return round(base_cost**((attribute / 10) + 1))
+def train_attribute(attribute):
+    player.gold -= attribute[1]
+    attribute[1] = round(attribute[1]**1.1)
+    attribute[0] += 1
 
 
-def gold_check(base_cost, training):
-    cost = training_cost(base_cost, training)
-    print(cost)
-    if training > 9:
+def gold_check(training):
+    if training[0] > 9:
         print("Already max level!")
         return False
-    elif player.gold >= cost:
+    elif player.gold >= training[1]:
         return True
     else:
         print("You don't have enough gold!")
@@ -476,49 +486,33 @@ def price_equipment(equipment):
 
 class Shop:
     def __init__(self):
-        self.health = 0
-        self.mana = 0
-        self.attack = 0
-        self.defence = 0
+        self.health = [0, 150]
+        self.mana = [0, 50]
+        self.attack = [0, 150]
+        self.defence = [0, 150]
         # emoji names :green_square:   :white_large_square:
 
     def training(self):
+        self.training_attributes = [
+            self.health, self.mana, self.attack, self.defence
+        ]
         while True:
-            cls()
             color_print(Fore.YELLOW, f"Gold: {player.gold}")
             training_board(
-                Health=self.health,
-                Mana=self.mana,
-                Attack=self.attack,
-                Defence=self.defence)
+                Health=self.health[0],
+                Mana=self.mana[0],
+                Attack=self.attack[0],
+                Defence=self.defence[0])
             train = input_handler(
                 5, "What would you like to train in?\n",
-                *show_options(
-                    f"Health (Cost:{training_cost(150, self.health)})",
-                    f"Mana (Cost:{training_cost(50, self.mana)})",
-                    f"Attack (Cost:{training_cost(150, self.attack)})",
-                    f"Defence (Cost:{training_cost(150, self.defence)})",
-                    "Go back"))
-            if train == 1:
-                if gold_check(150, self.health):
-                    player.gold -= training_cost(150, self.health)
-                    self.health += 1
-                    player.health[1] += 1
-            elif train == 2:
-                if gold_check(50, self.mana):
-                    player.gold -= training_cost(50, self.mana)
-                    self.mana += 1
-                    player.mana[1] += 1
-            elif train == 3:
-                if gold_check(150, self.attack):
-                    player.gold -= training_cost(150, self.attack)
-                    self.attack += 1
-                    player.attack += 1
-            elif train == 4:
-                if gold_check(150, self.defence):
-                    player.gold -= training_cost(150, self.defence)
-                    self.defence += 1
-                    player.defence += 1
+                *show_options(f"Health (Cost:{self.health[1]})",
+                              f"Mana (Cost:{self.mana[1]})",
+                              f"Attack (Cost:{self.attack[1]})",
+                              f"Defence (Cost:{self.defence[1]})", "Go back"))
+            if train < 5:
+                if gold_check(self.training_attributes[train - 1]):
+                    train_attribute(self.training_attributes[(train - 1)])
+                    player.train(train)
             elif train == 5:
                 break
 

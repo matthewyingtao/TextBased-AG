@@ -9,6 +9,7 @@ from emoji import emojize
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
+
 # [health, attack, defence, avg xp, avg gold]
 tier_attributes = {
     "gargantuan_monsters": [50, 50, 10, 800, 1000],
@@ -278,24 +279,28 @@ class Equipment:
         self.attack = base_stats[2]
         self.defence = base_stats[3]
         self.mod = None
-        self.mod_effect = [0, 0, 0, 0]
+        self.mod_effect = [1, 1, 1, 1]
         self.isEquipped = False
 
     # Apply mod changes in stats
     def change_stats(self, operation):
-        change = [(operation * effect) for effect in self.mod_effect]
-        self.health += change[0]
-        self.mana += change[1]
-        self.attack += change[2]
-        self.defence += change[3]
+        print(self.mod_effect)
+        if operation:
+            change = self.mod_effect
+        else:
+            change = [ceil(1 / effect) for effect in self.mod_effect]
+        self.health *= change[0]
+        self.mana *= change[1]
+        self.attack *= change[2]
+        self.defence *= change[3]
 
     # remove mod from an item's stats
     def remove_mod(self):
         if self.mod:
             self.name = self.name[len(self.mod) + 1:]
-        self.change_stats(-1)
+        self.change_stats(False)
         self.mod = None
-        self.mod_effect = [0, 0, 0, 0]
+        self.mod_effect = [1, 1, 1, 1]
 
     # roll new mod on item
     def roll_mod(self):
@@ -303,7 +308,7 @@ class Equipment:
         self.mod = implicits_list[random.randint(0, len(implicits_list) - 1)]
         self.mod_effect = implicits.get(self.mod)
         self.name = f"{self.mod} {self.name}"
-        self.change_stats(1)
+        self.change_stats(True)
 
     def stats(self):
         print_stats(

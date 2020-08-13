@@ -6,11 +6,9 @@ TO DO LIST:
         skill upgrades with money
         evaluate sell/buy price of equipment
     Combat:
-        ability to run away
         more moves
         battle cries / stat raisers
         consumables in combat
 
 LONG TERM GOALS:
     settings to change gameplay e.g stats interface
-    sound effects? https://docs.repl.it/repls/audio https://repl.it/@AllAwesome497/py-audio-demo#main.py

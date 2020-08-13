@@ -284,15 +284,14 @@ class Equipment:
 
     # Apply mod changes in stats
     def change_stats(self, operation):
-        print(self.mod_effect)
         if operation:
             change = self.mod_effect
         else:
             change = [ceil(1 / effect) for effect in self.mod_effect]
-        self.health *= change[0]
-        self.mana *= change[1]
-        self.attack *= change[2]
-        self.defence *= change[3]
+        self.health = round(self.health * change[0])
+        self.mana = round(self.mana * change[1])
+        self.attack = round(self.attack * change[2])
+        self.defence = round(self.defence * change[3])
 
     # remove mod from an item's stats
     def remove_mod(self):

@@ -13,5 +13,4 @@ TO DO LIST:
 
 LONG TERM GOALS:
     settings to change gameplay e.g stats interface
-    balance the game
     sound effects? https://docs.repl.it/repls/audio https://repl.it/@AllAwesome497/py-audio-demo#main.py

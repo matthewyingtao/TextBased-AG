@@ -9,9 +9,10 @@ from emoji import emojize
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
+# [health, attack, defence, avg xp, avg gold]
 tier_attributes = {
     "gargantuan_monsters": [50, 50, 10, 800, 1000],
-    "huge_monsters": [30, 9, 30, 400, 550],
+    "huge_monsters": [30, 30, 9, 400, 550],
     "large_monsters": [25, 20, 5, 180, 250],
     "medium_monsters": [18, 15, 4, 80, 120],
     "small_monsters": [13, 8, 3, 40, 80],
@@ -176,7 +177,15 @@ def adventure():
 def battle(combat_monster):
     while combat_monster.health[0] > 0 and player.health[0] > 0:
         combat_monster.stats()
-        damage_calc(player, attacks_list[attack_check()], combat_monster)
+        action = input_handler(2, *show_options("Attacks", "Run"))
+        if action == 1:
+            damage_calc(player, attacks_list[attack_check()], combat_monster)
+        elif action == 2:
+            if random.choice((True, False)):
+                print("You successfully fled")
+                break
+            else:
+                print("You failed to flee")
         if combat_monster.health[0] > 0:
             damage_calc(combat_monster, attacks_list[0], player)
     if combat_monster.health[0] <= 0:

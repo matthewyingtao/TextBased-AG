@@ -65,7 +65,7 @@ materials_list = list(materials.keys())
 
 # clear screen
 def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 # pass arguments to print multiple strings in a certain color
@@ -217,7 +217,7 @@ def save_player():
     player.shop = shop
     # open player save file and dump the current player object
     save_name = input("Save name:")
-    with open(f"saves/{save_name}", 'wb') as player_file:
+    with open(f"saves/{save_name}", "wb") as player_file:
         pickle.dump(player, player_file)
     cls()
     color_print(Fore.GREEN, "Game saved!")
@@ -227,7 +227,7 @@ def load_player():
     # load player save file and set player to the loaded object
     save_files = [file for file in os.listdir("saves")]
     load = input_handler(len(save_files), *show_options(*save_files)) - 1
-    player_load = open(f"saves/{save_files[load]}", 'rb')
+    player_load = open(f"saves/{save_files[load]}", "rb")
     cls()
     color_print(Fore.GREEN, "Game loaded!")
     return pickle.load(player_load)

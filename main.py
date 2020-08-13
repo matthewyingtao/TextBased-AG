@@ -9,20 +9,21 @@ from emoji import emojize
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
+# [health, attack, defence, avg xp, avg gold]
 tier_attributes = {
-    "gargantuan_monsters": [50, 40, 10, 800, 1000],
-    "huge_monsters": [30, 9, 25, 400, 550],
-    "large_monsters": [25, 15, 5, 180, 250],
-    "medium_monsters": [18, 10, 4, 80, 120],
-    "small_monsters": [13, 3, 3, 40, 80],
-    "tiny_monsters": [8, 0, 2, 20, 40]
+    "gargantuan_monsters": [50, 50, 10, 800, 1000],
+    "huge_monsters": [30, 30, 9, 400, 550],
+    "large_monsters": [25, 20, 5, 180, 250],
+    "medium_monsters": [18, 15, 4, 80, 120],
+    "small_monsters": [13, 8, 3, 40, 80],
+    "tiny_monsters": [8, 3, 2, 20, 40]
 }
 
-# this is the stats of the attacks for when you are fighting monsters
-attacks = {
-    "Slash": [3, 0.9, 0.1, 0],
-    "Fireball": [4, 0.7, 0.25, 1],
-    "Shock": [2, 1, 0.5, 1]
+# this is the stats of the abilities [damage multiplier, hit chance, crit chance, mana cost]
+abilities = {
+    "Slash": [1, 0.9, 0.1, 0],
+    "Fireball": [1.5, 0.7, 0.25, 1],
+    "Shock": [0.8, 1, 0.5, 1]
 }
 
 # list of equippable items
@@ -56,7 +57,7 @@ weights = [50, 30, 20, 10, 5, 1]
 
 # convert dictionaries to lists to use as keys
 implicits_list = list(implicits.keys())
-attacks_list = list(attacks.keys())
+attacks_list = list(abilities.keys())
 equips_list = list(equips.keys())
 materials_list = list(materials.keys())
 
@@ -105,7 +106,7 @@ def show_options(*strings):
 
 def loot(difficulty):
     loot_weight = [
-        (weight * (index ** monster_tiers_names.index(difficulty) + 1))
+        (weight * (index**monster_tiers_names.index(difficulty) + 1))
         for index, weight in enumerate(weights)
     ]
     if random.choice((True, False)):
@@ -122,14 +123,14 @@ def loot(difficulty):
 def damage_calc(attacker, move, defender):
     # get random float between 0-1 and check for miss
     miss = random.random()
-    attack = attacker.attack + attacks.get(move)[0]
-    if miss < attacks.get(move)[1]:
+    attack = attacker.attack * abilities.get(move)[0]
+    if miss < abilities.get(move)[1]:
         damage = ceil(attack - (defender.defence / sqrt(attack)))
         if damage < 1:
             damage = 0
         # get random float between 0-1 and check for critical hit, doubles damage if true
         critical_hit = random.random()
-        if critical_hit < attacks.get(move)[2]:
+        if critical_hit < abilities.get(move)[2]:
             damage *= 2
             color_print(Fore.GREEN, "Critical Hit!")
         # calculate damage
@@ -144,17 +145,17 @@ def damage_calc(attacker, move, defender):
 
 # check if the attack selection exists or can be used
 def attack_check():
-    for index, action in enumerate(attacks.keys()):
+    for index, action in enumerate(abilities.keys()):
         print(f"-{index + 1}- {action}")
     print()
     while True:
-        selection = input_handler((len(attacks))) - 1
+        selection = input_handler((len(abilities))) - 1
         # check if player has enough mana to use
-        if player.mana[0] - attacks.get(attacks_list[selection])[3] < 0:
+        if player.mana[0] - abilities.get(attacks_list[selection])[3] < 0:
             color_print(Fore.RED, "not enough mana!")
         else:
             break
-    player.mana[0] -= attacks.get(attacks_list[selection])[3]
+    player.mana[0] -= abilities.get(attacks_list[selection])[3]
     return selection
 
 
@@ -176,11 +177,18 @@ def adventure():
 def battle(combat_monster):
     while combat_monster.health[0] > 0 and player.health[0] > 0:
         combat_monster.stats()
-        damage_calc(player, attacks_list[attack_check()], combat_monster)
+        action = input_handler(2, *show_options("Attacks", "Run"))
+        if action == 1:
+            damage_calc(player, attacks_list[attack_check()], combat_monster)
+        elif action == 2:
+            if random.choice((True, False)):
+                print("You successfully fled")
+                break
+            else:
+                print("You failed to flee")
         if combat_monster.health[0] > 0:
             damage_calc(combat_monster, attacks_list[0], player)
-    if combat_monster.health[0] < 1:
-        cls()
+    if combat_monster.health[0] <= 0:
         color_print(Fore.GREEN, f"You have defeated {combat_monster.name}")
         player.xp[0] += combat_monster.xp
         player.xp_check()
@@ -414,6 +422,16 @@ class Character:
         self.defence += item.defence * multiplier
         item.isEquipped = not item.isEquipped
 
+    def train(self, attribute):
+        if attribute == 1:
+            self.health[1] += 1
+        elif attribute == 2:
+            self.mana[1] += 1
+        elif attribute == 3:
+            self.attack += 1
+        elif attribute == 4:
+            self.defence += 1
+
 
 class Monster:
     def __init__(self, tier_list, tier):
@@ -444,17 +462,17 @@ def training_board(**attributes):
         print(f" {training}  - {attribute}")
 
 
-def training_cost(base_cost, attribute):
-    return round(base_cost ** ((attribute / 10) + 1))
+def train_attribute(attribute):
+    player.gold -= attribute[1]
+    attribute[1] = round(attribute[1]**1.1)
+    attribute[0] += 1
 
 
-def gold_check(base_cost, training):
-    cost = training_cost(base_cost, training)
-    print(cost)
-    if training > 9:
+def gold_check(training):
+    if training[0] > 9:
         print("Already max level!")
         return False
-    elif player.gold >= cost:
+    elif player.gold >= training[1]:
         return True
     else:
         print("You don't have enough gold!")
@@ -466,7 +484,7 @@ def potion_shop():
 
 
 def price_equipment(equipment):
-    price = 50 ** ((materials_list.index(equipment.material) / 10) + 1)
+    price = 50**((materials_list.index(equipment.material) / 10) + 1)
     price = round(price * (equipment.attack + equipment.mana + equipment.attack
                            + equipment.defence))
     return price
@@ -477,49 +495,34 @@ def price_equipment(equipment):
 
 class Shop:
     def __init__(self):
-        self.health = 0
-        self.mana = 0
-        self.attack = 0
-        self.defence = 0
+        self.health = [0, 150]
+        self.mana = [0, 50]
+        self.attack = [0, 150]
+        self.defence = [0, 150]
         # emoji names :green_square:   :white_large_square:
 
     def training(self):
+        self.training_attributes = [
+            self.health, self.mana, self.attack, self.defence
+        ]
         while True:
             cls()
             color_print(Fore.YELLOW, f"Gold: {player.gold}")
             training_board(
-                Health=self.health,
-                Mana=self.mana,
-                Attack=self.attack,
-                Defence=self.defence)
+                Health=self.health[0],
+                Mana=self.mana[0],
+                Attack=self.attack[0],
+                Defence=self.defence[0])
             train = input_handler(
                 5, "What would you like to train in?\n",
-                *show_options(
-                    f"Health (Cost:{training_cost(150, self.health)})",
-                    f"Mana (Cost:{training_cost(50, self.mana)})",
-                    f"Attack (Cost:{training_cost(150, self.attack)})",
-                    f"Defence (Cost:{training_cost(150, self.defence)})",
-                    "Go back"))
-            if train == 1:
-                if gold_check(150, self.health):
-                    player.gold -= training_cost(150, self.health)
-                    self.health += 1
-                    player.health[1] += 1
-            elif train == 2:
-                if gold_check(50, self.mana):
-                    player.gold -= training_cost(50, self.mana)
-                    self.mana += 1
-                    player.mana[1] += 1
-            elif train == 3:
-                if gold_check(150, self.attack):
-                    player.gold -= training_cost(150, self.attack)
-                    self.attack += 1
-                    player.attack += 1
-            elif train == 4:
-                if gold_check(150, self.defence):
-                    player.gold -= training_cost(150, self.defence)
-                    self.defence += 1
-                    player.defence += 1
+                *show_options(f"Health (Cost:{self.health[1]})",
+                              f"Mana (Cost:{self.mana[1]})",
+                              f"Attack (Cost:{self.attack[1]})",
+                              f"Defence (Cost:{self.defence[1]})", "Go back"))
+            if train < 5:
+                if gold_check(self.training_attributes[train - 1]):
+                    train_attribute(self.training_attributes[(train - 1)])
+                    player.train(train)
             elif train == 5:
                 break
 

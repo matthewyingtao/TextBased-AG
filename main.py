@@ -519,6 +519,7 @@ class Shop:
         self.mana = [0, 50]
         self.attack = [0, 150]
         self.defence = [0, 150]
+        self.training_attributes = None
         # emoji names :green_square:   :white_large_square:
 
     def training(self):

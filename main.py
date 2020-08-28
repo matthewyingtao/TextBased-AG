@@ -468,8 +468,7 @@ class Monster:
 def training_board(**attributes):
     for attribute, value in attributes.items():
         training = value * emojize(":green_square:")
-        for i in range(10 - len(training)):
-            training += emojize(":white_large_square:")
+        training += (10 - len(training)) * emojize(":white_large_square:")
         print(f" {training}  - {attribute}")
 
 

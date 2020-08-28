@@ -188,8 +188,7 @@ def battle(combat_monster):
             if random.choice((True, False)):
                 print("You successfully fled")
                 break
-            else:
-                print("You failed to flee")
+            print("You failed to flee")
         if combat_monster.health[0] > 0:
             damage_calc(combat_monster, attacks_list[0], player)
     if combat_monster.health[0] <= 0:

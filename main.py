@@ -250,9 +250,11 @@ def manage_saves():
     if save_action == 1:
         save_player()
         return False
-    elif save_action == 2:
+
+    if save_action == 2:
         return True
-    elif save_action == 3:
+
+    if save_action == 3:
         delete_save()
         return False
 
@@ -482,10 +484,10 @@ def gold_check(training):
     if training[0] > 9:
         print("Already max level!")
         return False
-    elif player.gold >= training[1]:
+
+    if player.gold >= training[1]:
         return True
-    else:
-        print("You don't have enough gold!")
+    print("You don't have enough gold!")
     return False
 
 

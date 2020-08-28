@@ -9,7 +9,6 @@ from emoji import emojize
 from implicits import implicits
 from monsters import gargantuan_monsters, huge_monsters, large_monsters, medium_monsters, small_monsters, tiny_monsters
 
-
 # [health, attack, defence, avg xp, avg gold]
 tier_attributes = {
     "gargantuan_monsters": [50, 50, 10, 800, 1000],
@@ -20,7 +19,7 @@ tier_attributes = {
     "tiny_monsters": [8, 3, 2, 20, 40]
 }
 
-# this is the stats of the abilities [damage multiplier, hit chance, crit chance, mana cost]
+# stats of the abilities [damage multiplier, hit chance, crit chance, mana cost]
 abilities = {
     "Slash": [1, 0.9, 0.1, 0],
     "Fireball": [1.5, 0.7, 0.25, 1],
@@ -35,6 +34,7 @@ equips = {
     "Ring": [0, 1, 1, 0]
 }
 
+# material multiplies the base stats of an item
 materials = {
     "Iron": 1,
     "Bronze": 1.5,
@@ -77,6 +77,8 @@ def color_print(color, *args):
 
 # handles all numeric inputs
 def input_handler(max_input, *strings):
+    if max_input <= 0:
+        max_input = 1
     for string in strings:
         print(string)
     while True:
@@ -98,6 +100,7 @@ def input_handler(max_input, *strings):
             color_print(Fore.RED, "Enter a number!")
 
 
+# return a list of strings with index
 def show_options(*strings):
     options = []
     for index, string in enumerate(strings):
@@ -225,7 +228,7 @@ def save_player():
 
 def load_player():
     # load player save file and set player to the loaded object
-    save_files = [file for file in os.listdir("saves")]
+    save_files = os.listdir("saves")
     load = input_handler(len(save_files), *show_options(*save_files)) - 1
     player_load = open(f"saves/{save_files[load]}", "rb")
     cls()
@@ -234,7 +237,7 @@ def load_player():
 
 
 def delete_save():
-    save_files = [file for file in os.listdir("saves")]
+    save_files = os.listdir("saves")
     delete = input_handler(
         len(save_files), "Which file would you like to delete?",
         *show_options(*save_files)) - 1
@@ -375,7 +378,7 @@ class Character:
             self.level_up()
             self.xp_check()
 
-    def show_inventory(self):
+    def print_inventory(self):
         print("INVENTORY:")
         # make list of names from inventory items before printing
         for item in self.inventory:
@@ -383,6 +386,9 @@ class Character:
                 f"({self.inventory.index(item) + 1}) {item.name}  ({Fore.LIGHTBLUE_EX}{item.health}, {item.mana}, {item.attack}, {item.defence}{Fore.RESET})"
             )
         print()
+
+    def show_inventory(self):
+        self.print_inventory()
         inventory_action = input_handler(
             4, "What would you like to do? \n",
             *show_options("Re-roll modifier", "Equip item", "Inspect item",
@@ -494,7 +500,16 @@ def price_equipment(equipment):
     return price
 
 
-# price_equipment(self.inventory[select_item])
+def sell_item():
+    player.print_inventory()
+    select_item = input_handler(len(player.inventory), "Which item?") - 1
+    sell_price = price_equipment(player.inventory[select_item])
+    color_print(
+        Fore.YELLOW,
+        f"You sold {player.inventory[select_item].name} for {price_equipment(player.inventory[select_item])} gold"
+    )
+    player.gold += sell_price
+    del player.inventory[select_item]
 
 
 class Shop:
@@ -538,7 +553,7 @@ class Shop:
         if shop_action == 1:
             print("Not added yet!")
         elif shop_action == 2:
-            print("Not added yet!")
+            sell_item()
         elif shop_action == 3:
             self.training()
         elif shop_action == 4:

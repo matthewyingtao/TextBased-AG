@@ -55,9 +55,17 @@ def get_base_stats(item_type):
     return base_stats
 
 
-class Equipment:
+class Entity:
+    def __init__(self, name, health, attack, defence):
+        self.name = name
+        self.health = health
+        self.attack = attack
+        self.defence = defence
+
+
+class Equipment(Entity):
     def __init__(self, material, equip_type):
-        self.name = material + " " + equip_type
+        super().__init__((material + " " + equip_type), 0, 0, 0)
         self.type = equip_type
         self.material = material
         base_stats = [
@@ -110,13 +118,11 @@ class Equipment:
             Equipped=self.isEquipped)
 
 
-class Character:
+class Character(Entity):
     def __init__(self, player_name):
+        super.__init__(player_name, [10, 10], 3, 0)
         self.name = player_name
-        self.health = [10, 10]
         self.mana = [5, 5]
-        self.attack = 3
-        self.defence = 0
         self.xp = [0, 50]
         self.level = 1
         self.gold = 0
@@ -230,16 +236,15 @@ class Character:
             self.defence += 1
 
 
-class Monster:
+class Monster(Entity):
     def __init__(self, tier_list, tier):
-        self.name = random.choice(list(tier_list))
+        super.__init__(
+            random.choice(list(tier_list)),
+            [tier_attributes.get(tier)[0],
+             tier_attributes.get(tier)[0]],
+            tier_attributes.get(tier)[1],
+            tier_attributes.get(tier)[2])
         self.tier = tier
-        self.health = [
-            tier_attributes.get(tier)[0],
-            tier_attributes.get(tier)[0]
-        ]
-        self.attack = tier_attributes.get(tier)[1]
-        self.defence = tier_attributes.get(tier)[2]
         self.xp = round(
             tier_attributes.get(tier)[3] * random.uniform(0.8, 1.2))
 
